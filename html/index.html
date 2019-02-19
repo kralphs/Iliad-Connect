@@ -266,28 +266,35 @@
   </script>
   <script type="text/javascript"> 
 
-      function postIdTokenToSessionLogin(idToken) {
-
+      function postIdTokenToSessionLogin(csrfToken, idToken) {
           var xhr = new XMLHttpRequest();
           formData = new FormData();
+
           formData.set("token", idToken);
-          formData.set("gorilla.csrf.Token",getSessionCSRFToken())
+          formData.set("gorilla.csrf.Token",csrfToken)
           alert(formData.get("gorilla.csrf.Token"));
           xhr.open('POST','/sessionLogin', false);
-//          xhr.setRequestHeader("X-CSRF-Token",getSessionCSRFToken());
           xhr.onload = function () {alert(xhr.status);};
           xhr.send(formData);
       };
 
       function getSessionCSRFToken() {
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', '/sessionLogin', false);
-        xhr.onload = function () {
-          if (xhr.readyState=== 4 && xhr.status === 200) {
-            var csrfToken = xhr.getResponseHeader('X-CSRF-Token');
+
+        return new Promise(function (resolve, reject) {
+          xhr.onload = function () {
+            if (xhr.readyState=== 4 && xhr.status === 200) {
+              resolve(xhr);
+            } else {
+              reject({
+				    	  status: xhr.status,
+					      statusText: xhr.statusText
+				      });
+            };
           };
-        };
-        xhr.send(null).then();
+          xhr.open('GET', '/sessionLogin', true);
+          xhr.send(null);
+        });
       };
 
       // FirebaseUI config.
@@ -315,13 +322,15 @@
                       // Session login endpoint is queried and the session cookie is set.
                       // CSRF protection should be taken into account.
                       // ...  
-                      getSessionCSRFToken();
-//                      return postIdTokenToSessionLogin(idToken);
+                      getSessionCSRFToken().then(xhr => {
+                        alert('Posting')
+                        postIdTokenToSessionLogin(xhr.getResponseHeader('X-CSRF-TOKEN'), idToken)
+                      });
                   }).then(() => {
                       // A page redirect would suffice as the persistence is set to NONE.
-//                      return firebase.auth().signOut();
+                      return firebase.auth().signOut();
                   }).then(() => {
-//                      window.location.assign('/profile');
+                      window.location.assign('/profile');
                   });
               } else {
                   // User is signed out.
