@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Iliad Connect</title>
+   
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.css" />
+    <link type="text/css" rel="stylesheet" href="/static/style.css" />
+
+    
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBDQSrJenljnhUiRce5tUgSRJjRoapXkT0",
+            authDomain: "iliad-connect-227218.firebaseapp.com",
+            databaseURL: "https://iliad-connect-227218.firebaseio.com",
+            projectId: "iliad-connect-227218",
+            storageBucket: "iliad-connect-227218.appspot.com",
+            messagingSenderId: "502779193562"
+        };
+        firebase.initializeApp(config);
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+    </script>
+    <script type="text/javascript"> 
+
+        function postIdTokenToSessionLogin() {
+            var xhr = new XMLHttpRequest();
+            postForm = document.getElementById("post-form");
+            formData = new FormData(postForm);
+
+            xhr.open('POST','/sessionLogin', false);
+ //           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("X-CSRF-Token",document.getElementsByName("gorilla.csrf.Token")[0].value)
+
+            xhr.send(formData);
+        }
+
+        // FirebaseUI config.
+        var uiConfig = {
+            signInSuccessUrl: '/',
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID
+            ],
+            // tosUrl and privacyPolicyUrl accept either url string or a callback
+            // function.
+            // Terms of service url/callback.
+            tosUrl: '<your-tos-url>',
+            // Privacy policy url/callback.
+            privacyPolicyUrl: function() {
+                window.location.assign('<your-privacy-policy-url>');
+            }
+        };
+
+        initApp = function() {
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // Get the user's ID token as it is needed to exchange for a session cookie.
+                    return user.getIdToken().then(idToken => {
+                        // Session login endpoint is queried and the session cookie is set.
+                        // CSRF protection should be taken into account.
+                        // ...  
+                        document.getElementById("token").value = idToken;
+                        return postIdTokenToSessionLogin();
+                    }).then(() => {
+                        // A page redirect would suffice as the persistence is set to NONE.
+                        return firebase.auth().signOut();
+                    }).then(() => {
+                        window.location.assign('/profile');
+                    });
+                } else {
+                    // User is signed out.
+                
+                    // Initialize the FirebaseUI Widget using Firebase.
+                    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+                    // The start method will wait until the DOM is loaded.
+                    ui.start('#firebaseui-auth-container', uiConfig);
+                    // Update the login state indicators.
+                    document.getElementById('sign-out').hidden = true;
+                    document.getElementById('post-form').hidden = true;
+                    document.getElementById('account-details').textContent = '';
+                }
+            }, function(error) {
+                console.log(error);
+            });
+        };
+
+        window.addEventListener('load', function() {
+            initApp()
+        });
+    </script>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+
+</head>
+<body>
+    <h1>Iliad Connect</h1>
+    <div id="sign-in"></div>
+    <div>
+      <span id="account-details"></span><br>
+      <button id="sign-out" hidden=true>Sign Out</button>
+    </div>
+    
+    <div id="firebaseui-auth-container"></div>
+    <form id="post-form" action="/sessionLogin" method="post" hidden=true>
+        <input type="hidden" name="token" id="token">
+        {{ .csrfField }}
+        <input type="submit" name="console" id="console" value="Console">
+      </form>
+</body>
+</html>

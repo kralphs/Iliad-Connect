@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "iliad-connect-227218",
+  "private_key_id": "41f84405b19f2687e6b7a8019f00ccc32d003102",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCw+rpKSNjSZkum\nxpUG0h26mtONFDx9IE66oZKZyLyiCldqEex1WFWw8IclSo0MBU6kCyCwHGU0ssAm\n1PhC2qu/8mO2GyXaMfGTSaNXAXD7n9WLyB+rFjgRfuuqab5t7ZSOcq8SVU2u+lIC\nBfo9RU+01pv7d0OSUwELt2Euv3dOeXWHHQOoqJdC0HlU+ekOJGbd3syA2UD8TDS5\nxSIPA9wLI3g1zx31H3ZJ8qWot7AZDbitXGTN9Opzpfu0+6C2aDvsnyOK4MShi5oK\nF6JXtvOZugxsU+KV7JcFbxbYCxrDlxAJTfT3yjTUS0PNMwKeWxM6KlmoEdqE7aHu\nLzlxuD2NAgMBAAECggEAPIiFz4K7Jrv2hETIFF0p7fmnAko5plK2mv9ItXEDlCkV\nXSJkTn64UJz0nLyzIblu/I0R0SrlMvEw6BdQEw3YUP8HO/JtMASFLGuzgr7rdiVl\nVTpOGqau5s0Srmccy1zHwzFW0F59A6x7AFYrEWnzqVb+YzSX2CSr5uYCR4sVs7El\n9YQSQPTUvBzWmlVsNzy16VsjVw6pkUYBZzXd1/lMj9f/u8egkxBx4KSDrrUYcSNq\nrD65JRXsbDq7jHZLSwy1v6RoyWYtFgAKgMWN2uUCx7feupztG2zSCdl4TiqRDwEh\nxTXGnyd8SyA7WSgu1cTezdv/WyFBrEoFVvrUYedRwQKBgQDVxdx0Fpnmz3eaMRvZ\nnfFL2uJWwk+MHyTGhND8RO4lQav6eDMzLMbY9du4sBSZWphqhj4QTCp6n1KhEVm/\nAeO87+syiPBHPQCdcCbGtlgKc7aJsSPjKRT5nBP5NVGRRzlrm3oVdNB2jUoOtj3M\nZsNl81zn94+hgmKVcG1rt12ZNwKBgQDT8Ef2wO/tGuO2fi4FD543Q9eWPps9uhNM\nzLdstkTOQRnB2sLhKKGmFkFE03F8/+vxVOAkOUJJzDQzouFhx/pYeTTZpMK77c2t\nGyC/fD6YPOpnSznG3gT1xmpB6Tl0XOlrWIuPmpGkHh0XMrElbgCxQ/Axp12H+dJL\nJ7Dc7nrxWwKBgQCwFCqSYC9iAw8zrTGQXNzsqxz1c1WMR/bFoY51y90QSPh79VfO\n1hnviQrzI+3DpvCWBX7Hc8UlfWfVDXKLtuW7sS5cUJkBRIjmJQN7d6Qq78axwXua\n1zLUqq90/Gr0K+Nq9ARp+e7fR19xoMBkRVy68+pZkvr2gGvtRU6Lg9yPnwKBgFw4\ncMfxOjU8/xr4msO/AQRhM9z/jwN0BVPkvGfEg/oPn8qXizb4PCaOBoaRTw+qOJuB\naCq685ozDf/t/w5SOx/mVdXieI3XsyiA5mYMBRyvXPvnYtOi5huf47qcZlC44STB\nmbC5/GeiZtwiRazYydpYiprAjdVOInBra+0mpD6DAoGAEkX2cPxp8SATaZP/WfeS\nHbu/tXMYsdkyr42QhouQ+1hq+zNpgBGJ37hE2L509V6ScFw6jzSDPZxD7GZsmE+O\n528uIF3k/8r03S5f2uPLHlo+rsT4+NC4Kb8RJFyrEOQuksEZ2nB8WlPtBQK1Evtr\nI6rSt3FLSWWDMxNEcr2QeKA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-x3ikq@iliad-connect-227218.iam.gserviceaccount.com",
+  "client_id": "100689446058964807560",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-x3ikq%40iliad-connect-227218.iam.gserviceaccount.com"
+}

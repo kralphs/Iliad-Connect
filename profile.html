@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Iliad Connect</title>
+</head>
+<body>
+    <h1>Iliad Connect</h1>
+    
+    <div>
+      Welcome, {{ .Name }}!<br>
+      {{if .Clio}} <button id="clio">Unink Clio</button> {{else}} <button id="clio" onclick="window.location.replace('/auth/clio/login')">Link Clio</button> {{end}} <br>
+      {{if .Google}} <button id="google">Unink Google</button> {{else}} <button id="google" onclick="window.location.replace('/auth/google/login')">Link Google</button> {{end}} <br>
+      {{if .Subscription}} <button id="stripe">Cancel Subscription</button> {{else}} <button id="stripe" onclick="window.location.replace('/subscribe')">Subscribe</button> {{end}} <br>
+      <button id="sign-out">Sign Out</button>
+    </div>
+    
+</body>
+</html>
