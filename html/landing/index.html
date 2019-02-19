@@ -13,16 +13,16 @@
   <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 
   <!-- Bootstrap core CSS -->
-  <link href="html/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="html/landing/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
-  <link href="html/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-  <link href="html/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+  <link href="html/landing/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="html/landing/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
   <!-- Custom styles for this template -->
-  <link href="html/css/landing-page.min.css" rel="stylesheet">
-  <link href="html/css/iliad-theme.css" rel="stylesheet">
+  <link href="html/landing/css/landing-page.min.css" rel="stylesheet">
+  <link href="html/landing/css/iliad-theme.css" rel="stylesheet">
 
 </head>
 
@@ -31,7 +31,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-light bg-light static-top">
     <div class="container">
-      <a class="navbar-brand" href="#" ><img src="html/img/iliad-logo.png" alt="Iliad Connect" width="150px"></a>
+      <a class="navbar-brand" href="#" ><img src="html/landing/img/iliad-logo.png" alt="Iliad Connect" width="150px"></a>
       <a class="btn btn-primary" data-toggle="modal" data-target="#modalLogin">Sign In</a>
     </div>
   </nav>
@@ -117,21 +117,21 @@
     <div class="container-fluid p-0">
       <div class="row no-gutters">
 
-        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('html/img/bg-showcase-1.jpg');"></div>
+        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('html/landing/img/bg-showcase-1.jpg');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
           <h2>Benefit 1</h2>
           <p class="lead mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         </div>
       </div>
       <div class="row no-gutters">
-        <div class="col-lg-6 text-white showcase-img" style="background-image: url('html/img/bg-showcase-2.jpg');"></div>
+        <div class="col-lg-6 text-white showcase-img" style="background-image: url('html/landing/img/bg-showcase-2.jpg');"></div>
         <div class="col-lg-6 my-auto showcase-text">
           <h2>Benefit 2</h2>
           <p class="lead mb-0">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
         </div>
       </div>
       <div class="row no-gutters">
-        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('html/img/bg-showcase-3.jpg');"></div>
+        <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('html/landing/img/bg-showcase-3.jpg');"></div>
         <div class="col-lg-6 order-lg-1 my-auto showcase-text">
           <h2>Benefit 3</h2>
           <p class="lead mb-0">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga</p>
@@ -242,8 +242,8 @@
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="html/vendor/jquery/jquery.min.js"></script>
-  <script src="html/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="html/landing/vendor/jquery/jquery.min.js"></script>
+  <script src="html/landing/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <script src="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.js"></script>
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.1/firebaseui.css" />
@@ -325,6 +325,8 @@
                       getSessionCSRFToken().then(xhr => {
                         alert('Posting')
                         postIdTokenToSessionLogin(xhr.getResponseHeader('X-CSRF-TOKEN'), idToken)
+                      }).catch(error => {
+                        console.log('Failed to retrieve session token')
                       });
                   }).then(() => {
                       // A page redirect would suffice as the persistence is set to NONE.

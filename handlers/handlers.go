@@ -35,7 +35,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	//	indexTemplate.Execute(w, map[string]interface{}{
 	//		csrf.TemplateTag: csrf.TemplateField(r),
 	//	})
-	http.ServeFile(w, r, "html/index.html")
+	http.ServeFile(w, r, "html/landing/index.html")
 	return
 }
 
