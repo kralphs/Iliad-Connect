@@ -8,14 +8,12 @@ import (
 	"time"
 
 	"github.com/gorilla/csrf"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	//	firebase "firebase.google.com/go"
 )
 
 type templateParams struct {
 	Name         string
+	Photo        string
 	Clio         bool
 	Google       bool
 	Subscription bool
@@ -24,7 +22,7 @@ type templateParams struct {
 var (
 	publishableKey    = os.Getenv("PUBLISHABLE_KEY")
 	indexTemplate     = template.Must(template.ParseFiles("index.html"))
-	profileTemplate   = template.Must(template.ParseFiles("profile.html"))
+	profileTemplate   = template.Must(template.ParseFiles("html/profile/index.html"))
 	subscribeTemplate = template.Must(template.ParseFiles("subscribe.html"))
 
 	params templateParams
@@ -74,23 +72,19 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := Auth.GetUser(r.Context(), string(response.([]byte)))
 	if err != nil {
-		log.Fatalf("error retrieving user information: %v\n", err)
+		log.Fatalf("error retrieving user account: %v\n", err)
 		return
 	}
 
 	params.Name = user.DisplayName
+	params.Photo = user.PhotoURL
 
-	doc := firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("clio")
-	_, err = doc.Get(r.Context())
-	if grpc.Code(err) != codes.NotFound {
-		params.Clio = true
+	doc, err := firestoreClient.Collection("users").Doc(user.UID).Get(r.Context())
+	if err != nil {
+		log.Fatalf("error retrieving user information: %v\n", err)
+		return
 	}
-
-	doc = firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("google")
-	_, err = doc.Get(r.Context())
-	if grpc.Code(err) != codes.NotFound {
-		params.Google = true
-	}
+	log.Println(doc.Data())
 
 	profileTemplate.Execute(w, params)
 	return

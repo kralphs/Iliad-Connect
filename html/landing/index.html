@@ -272,9 +272,7 @@
 
           formData.set("token", idToken);
           formData.set("gorilla.csrf.Token",csrfToken)
-          alert(formData.get("gorilla.csrf.Token"));
           xhr.open('POST','/sessionLogin', false);
-          xhr.onload = function () {alert(xhr.status);};
           xhr.send(formData);
       };
 
@@ -323,7 +321,6 @@
                       // CSRF protection should be taken into account.
                       // ...  
                       getSessionCSRFToken().then(xhr => {
-                        alert('Posting')
                         postIdTokenToSessionLogin(xhr.getResponseHeader('X-CSRF-TOKEN'), idToken)
                       }).catch(error => {
                         console.log('Failed to retrieve session token')
