@@ -72,7 +72,8 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 
 	user, err := Auth.GetUser(r.Context(), string(response.([]byte)))
 	if err != nil {
-		log.Fatalf("error retrieving user account: %v\n", err)
+		log.Printf("error retrieving user account: %v\n", err)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
@@ -81,13 +82,18 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 
 	doc, err := firestoreClient.Collection("users").Doc(user.UID).Get(r.Context())
 	if err != nil {
-		log.Fatalf("error retrieving user information: %v\n", err)
+		log.Printf("error retrieving user information: %v\n", err)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	log.Println(doc.Data())
 
-	profileTemplate.Execute(w, params)
-	return
+	if doc.Data()["beta"] == true {
+		profileTemplate.Execute(w, params)
+		return
+	}
+
+	w.WriteHeader(http.StatusUnauthorized)
+
 }
 
 func sessionHandler(w http.ResponseWriter, r *http.Request) {
@@ -104,13 +110,13 @@ func sessionHandler(w http.ResponseWriter, r *http.Request) {
 
 		token, err := Auth.VerifyIDToken(ctx, idToken)
 		if err != nil {
-			log.Fatalf("error verifying ID token: %v\n", err)
+			log.Printf("error verifying ID token: %v\n", err)
 			return
 		}
 
 		sessionToken, err := sessionID()
 		if err != nil {
-			log.Fatalf("error creating session token: %v\n", err)
+			log.Printf("error creating session token: %v\n", err)
 			return
 		}
 		log.Println("Token Created")
