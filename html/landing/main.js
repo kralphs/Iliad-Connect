@@ -93,6 +93,8 @@ function getSessionCSRFToken() {
       initApp()
   });
 
+// Code for email gathering
+
 document.getElementById("top-submit").addEventListener("click", submitTop);
 document.getElementById("bottom-submit").addEventListener("click", submitBottom);
 
@@ -117,7 +119,7 @@ function saveEmail(email){
         email: email
     })
     .then(function(docRef) {
-        console.log("Email added: ", docRef.get().then(doc => {return doc.data().email}));
+        console.log("Email added");
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
