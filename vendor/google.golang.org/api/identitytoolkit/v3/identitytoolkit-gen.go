@@ -2097,8 +2097,8 @@ type VerifyAssertionResponse struct {
 	// DisplayName: The display name of the user.
 	DisplayName string `json:"displayName,omitempty"`
 
-	// Email: The email returned by the IdP. NOTE: The federated login user
-	// may not own the email.
+	// Email: The email returned by the IdP. NOTE: The federated login user id:188
+ // may not own the email.
 	Email string `json:"email,omitempty"`
 
 	// EmailRecycled: It's true if the email is recycled.
@@ -2294,8 +2294,8 @@ type VerifyPasswordResponse struct {
 	// DisplayName: The name of the user.
 	DisplayName string `json:"displayName,omitempty"`
 
-	// Email: The email returned by the IdP. NOTE: The federated login user
-	// may not own the email.
+	// Email: The email returned by the IdP. NOTE: The federated login user id:352
+ // may not own the email.
 	Email string `json:"email,omitempty"`
 
 	// ExpiresIn: If idToken is STS id token, then this field will be

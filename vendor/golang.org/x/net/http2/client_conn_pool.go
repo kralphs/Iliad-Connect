@@ -30,13 +30,13 @@ var (
 	_ clientConnPoolIdleCloser = noDialClientConnPool{}
 )
 
-// TODO: use singleflight for dialing and addConnCalls?
+// TODO: use singleflight for dialing and addConnCalls? id:218
 type clientConnPool struct {
 	t *Transport
 
-	mu sync.Mutex // TODO: maybe switch to RWMutex
-	// TODO: add support for sharing conns based on cert names
-	// (e.g. share conn for googleapis.com and appspot.com)
+	mu sync.Mutex // TODO: maybe switch to RWMutex id:113
+	// TODO: add support for sharing conns based on cert names id:147
+ // (e.g. share conn for googleapis.com and appspot.com)
 	conns        map[string][]*ClientConn // key is host:port
 	dialing      map[string]*dialCall     // currently in-flight dials
 	keys         map[*ClientConn][]string
@@ -244,12 +244,12 @@ func (p *clientConnPool) MarkDead(cc *ClientConn) {
 func (p *clientConnPool) closeIdleConnections() {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	// TODO: don't close a cc if it was just added to the pool
-	// milliseconds ago and has never been used. There's currently
-	// a small race window with the HTTP/1 Transport's integration
-	// where it can add an idle conn just before using it, and
-	// somebody else can concurrently call CloseIdleConns and
-	// break some caller's RoundTrip.
+	// TODO: don't close a cc if it was just added to the pool id:163
+ // milliseconds ago and has never been used. There's currently
+ // a small race window with the HTTP/1 Transport's integration
+ // where it can add an idle conn just before using it, and
+ // somebody else can concurrently call CloseIdleConns and
+ // break some caller's RoundTrip.
 	for _, vv := range p.conns {
 		for _, cc := range vv {
 			cc.closeIfIdle()

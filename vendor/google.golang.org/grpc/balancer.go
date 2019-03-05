@@ -75,8 +75,8 @@ type Balancer interface {
 	// Up informs the Balancer that gRPC has a connection to the server at
 	// addr. It returns down which is called once the connection to addr gets
 	// lost or closed.
-	// TODO: It is not clear how to construct and take advantage of the meaningful error
-	// parameter for down. Need realistic demands to guide.
+	// TODO: It is not clear how to construct and take advantage of the meaningful error id:373
+ // parameter for down. Need realistic demands to guide.
 	Up(addr Address) (down func(error))
 	// Get gets the address of a server for the RPC corresponding to ctx.
 	// i) If it returns a connected address, gRPC internals issues the RPC on the

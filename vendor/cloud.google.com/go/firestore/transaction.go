@@ -117,8 +117,8 @@ func (c *Client) RunTransaction(ctx context.Context, f func(context.Context, *Tr
 		}
 	}
 	var backoff gax.Backoff
-	// TODO(jba): use other than the standard backoff parameters?
-	// TODO(jba): get backoff time from gRPC trailer metadata? See extractRetryDelay in https://code.googlesource.com/gocloud/+/master/spanner/retry.go.
+	// TODO (jba): use other than the standard backoff parameters? id:76
+	// TODO (jba): get backoff time from gRPC trailer metadata? See extractRetryDelay in https://code.googlesource.com/gocloud/+/master/spanner/retry.go. id:96
 	var err error
 	for i := 0; i < t.maxAttempts; i++ {
 		var res *pb.BeginTransactionResponse
@@ -187,8 +187,8 @@ func (t *Transaction) rollback() {
 		Transaction: t.id,
 	})
 	// Ignore the rollback error.
-	// TODO(jba): Log it?
-	// Note: Rollback is idempotent so it will be retried by the gapic layer.
+	// TODO (jba): Log it? id:130
+ // Note: Rollback is idempotent so it will be retried by the gapic layer.
 }
 
 // Get gets the document in the context of the transaction. The transaction holds a

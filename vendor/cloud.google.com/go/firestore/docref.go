@@ -360,7 +360,7 @@ func (d *DocumentRef) newUpdateWithTransform(doc *pb.Document, updatePaths []Fie
 		var mask *pb.DocumentMask
 		if updatePaths != nil {
 			sfps := toServiceFieldPaths(updatePaths)
-			sort.Strings(sfps) // TODO(jba): make tests pass without this
+			sort.Strings(sfps) // TODO (jba): make tests pass without this id:94
 			mask = &pb.DocumentMask{FieldPaths: sfps}
 		}
 		w := &pb.Write{
@@ -387,7 +387,7 @@ func (d *DocumentRef) newUpdateWithTransform(doc *pb.Document, updatePaths []Fie
 
 // This helper turns server timestamp fields into a transform proto.
 func (d *DocumentRef) newServerTimestampTransform(serverTimestampFieldPaths []FieldPath, pc *pb.Precondition) *pb.Write {
-	sort.Sort(byPath(serverTimestampFieldPaths)) // TODO(jba): make tests pass without this
+	sort.Sort(byPath(serverTimestampFieldPaths)) // TODO (jba): make tests pass without this id:128
 	var fts []*pb.DocumentTransform_FieldTransform
 	for _, p := range serverTimestampFieldPaths {
 		fts = append(fts, serverTimestamp(p.toServiceFieldPath()))
@@ -397,7 +397,7 @@ func (d *DocumentRef) newServerTimestampTransform(serverTimestampFieldPaths []Fi
 			&pb.DocumentTransform{
 				Document:        d.Path,
 				FieldTransforms: fts,
-				// TODO(jba): should the transform have the same preconditions as the write?
+				// TODO (jba): should the transform have the same preconditions as the write? id:28
 			},
 		},
 		CurrentDocument: pc,
@@ -641,7 +641,7 @@ func (it *CollectionIterator) GetAll() ([]*CollectionRef, error) {
 }
 
 // Common fetch code for iterators that are backed by vkit iterators.
-// TODO(jba): dedup with same function in logging/logadmin.
+// TODO (jba): dedup with same function in logging/logadmin. id:54
 func iterFetch(pageSize int, pageToken string, pi *iterator.PageInfo, next func() error) (string, error) {
 	pi.MaxSize = pageSize
 	pi.Token = pageToken

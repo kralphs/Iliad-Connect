@@ -133,7 +133,7 @@ struct if_data8 {
 	u_long  ifi_iqdrops;
 	u_long  ifi_noproto;
 	u_long  ifi_hwassist;
-// FIXME: these are now unions, so maybe need to change definitions?
+// FIXME: these are now unions, so maybe need to change definitions? id:307
 #undef ifi_epoch
 	time_t  ifi_epoch;
 #undef ifi_lastchange

@@ -84,7 +84,7 @@ func (t TraceOptions) IsSampled() bool {
 // SpanContext contains the state that must propagate across process boundaries.
 //
 // SpanContext is not an implementation of context.Context.
-// TODO: add reference to external Census docs for SpanContext.
+// TODO: add reference to external Census docs for SpanContext. id:217
 type SpanContext struct {
 	TraceID      TraceID
 	SpanID       SpanID

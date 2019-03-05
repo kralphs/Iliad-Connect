@@ -330,7 +330,7 @@ func extractChanges(docMap, changeMap map[string]*DocumentSnapshot) (updates, ad
 }
 
 // For development only.
-// TODO(jba): remove.
+// TODO (jba): remove. id:30
 func assert(b bool) {
 	if !b {
 		panic("assertion failed")
@@ -360,7 +360,7 @@ func (s *watchStream) computeSnapshot(docTree *btree.BTree, docMap, changeMap ma
 		assert(oldDoc != nil)
 		delete(docMap, oldDoc.Ref.Path)
 		_, oldi := updatedTree.GetWithIndex(oldDoc)
-		// TODO(jba): have btree.Delete return old index
+		// TODO (jba): have btree.Delete return old index id:56
 		_, found := updatedTree.Delete(oldDoc)
 		assert(found)
 		changes = append(changes, DocumentChange{
@@ -377,7 +377,7 @@ func (s *watchStream) computeSnapshot(docTree *btree.BTree, docMap, changeMap ma
 		newDoc.ReadTime = readTime
 		docMap[name] = newDoc
 		updatedTree.Set(newDoc, nil)
-		// TODO(jba): change btree so Set returns index as second value.
+		// TODO (jba): change btree so Set returns index as second value. id:77
 		_, newi := updatedTree.GetWithIndex(newDoc)
 		changes = append(changes, DocumentChange{
 			Kind:     DocumentAdded,

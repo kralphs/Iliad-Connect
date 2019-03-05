@@ -369,8 +369,8 @@ func (q *Query) fieldValuesToCursorValues(fieldValues []interface{}) ([]*pb.Valu
 	for i, ord := range q.orders {
 		fval := fieldValues[i]
 		if ord.isDocumentID() {
-			// TODO(jba): support DocumentRefs as well as strings.
-			// TODO(jba): error if document ref does not belong to the right collection.
+			// TODO (jba): support DocumentRefs as well as strings. id:75
+			// TODO (jba): error if document ref does not belong to the right collection. id:95
 			docID, ok := fval.(string)
 			if !ok {
 				return nil, fmt.Errorf("firestore: expected doc ID for DocumentID field, got %T", fval)
@@ -391,7 +391,7 @@ func (q *Query) fieldValuesToCursorValues(fieldValues []interface{}) ([]*pb.Valu
 }
 
 func (q *Query) docSnapshotToCursorValues(ds *DocumentSnapshot, orders []order) ([]*pb.Value, error) {
-	// TODO(jba): error if doc snap does not belong to the right collection.
+	// TODO (jba): error if doc snap does not belong to the right collection. id:129
 	vals := make([]*pb.Value, len(orders))
 	for i, ord := range orders {
 		if ord.isDocumentID() {

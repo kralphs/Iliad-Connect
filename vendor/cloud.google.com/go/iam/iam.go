@@ -171,8 +171,8 @@ const (
 //
 // The zero Policy is a valid policy with no bindings.
 type Policy struct {
-	// TODO(jba): when type aliases are available, put Policy into an internal package
-	// and provide an exported alias here.
+	// TODO (jba): when type aliases are available, put Policy into an internal package id:97
+ // and provide an exported alias here.
 
 	// This field is exported for use by the Google Cloud Libraries only.
 	// It may become unexported in a future release.
@@ -238,7 +238,7 @@ func (p *Policy) Remove(member string, r RoleName) {
 		return
 	}
 	// Remove member.
-	// TODO(jba): worry about multiple copies of m?
+	// TODO (jba): worry about multiple copies of m? id:131
 	last := len(b.Members) - 1
 	b.Members[mi] = b.Members[last]
 	b.Members[last] = ""

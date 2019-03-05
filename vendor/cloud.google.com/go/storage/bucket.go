@@ -201,7 +201,7 @@ func (b *BucketHandle) Update(ctx context.Context, uattrs BucketAttrsToUpdate) (
 	if uattrs.PredefinedDefaultObjectACL != "" {
 		req.PredefinedDefaultObjectAcl(uattrs.PredefinedDefaultObjectACL)
 	}
-	// TODO(jba): retry iff metagen is set?
+	// TODO (jba): retry iff metagen is set? id:78
 	rb, err := req.Context(ctx).Do()
 	if err != nil {
 		return nil, err

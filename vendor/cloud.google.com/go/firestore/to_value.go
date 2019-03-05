@@ -212,7 +212,7 @@ func structToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 		fv := v.FieldByIndex(f.Index)
 		opts := f.ParsedTag.(tagOptions)
 		if opts.serverTimestamp {
-			// TODO(jba): should we return a non-zero time?
+			// TODO (jba): should we return a non-zero time? id:29
 			sawTransform = true
 			continue
 		}
@@ -276,7 +276,7 @@ var fieldCache = fields.NewCache(parseTag, nil, isLeafType)
 
 // isEmptyValue is taken from the encoding/json package in the
 // standard library.
-// TODO(jba): move to the fields package
+// TODO (jba): move to the fields package id:55
 func isEmptyValue(v reflect.Value) bool {
 	switch v.Kind() {
 	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:

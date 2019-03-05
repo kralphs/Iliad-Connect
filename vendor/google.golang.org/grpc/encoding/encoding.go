@@ -56,7 +56,7 @@ var registeredCompressor = make(map[string]Compressor)
 // header.  Servers also use it to send a response with the same encoding as
 // the request.
 //
-// NOTE: this function must only be called during initialization time (i.e. in
+// NOTE: this function must only be called during initialization time (i.e. in id:242
 // an init() function), and is not thread-safe.  If multiple Compressors are
 // registered with the same name, the one registered last will take effect.
 func RegisterCompressor(c Compressor) {
@@ -95,7 +95,7 @@ var registeredCodecs = make(map[string]Codec)
 // https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md#requests for
 // more details.
 //
-// NOTE: this function must only be called during initialization time (i.e. in
+// NOTE: this function must only be called during initialization time (i.e. in id:360
 // an init() function), and is not thread-safe.  If multiple Compressors are
 // registered with the same name, the one registered last will take effect.
 func RegisterCodec(codec Codec) {

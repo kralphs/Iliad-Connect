@@ -26,7 +26,7 @@ import (
 // parseMethodName splits service and method from the input. It expects format
 // "/service/method".
 //
-// TODO: move to internal/grpcutil.
+// TODO: move to internal/grpcutil. id:361
 func parseMethodName(methodName string) (service, method string, _ error) {
 	if !strings.HasPrefix(methodName, "/") {
 		return "", "", errors.New("invalid method name: should start with /")

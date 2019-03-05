@@ -33,7 +33,7 @@ import (
 )
 
 var (
-	defaultSink Sink = &noopSink{} // TODO(blog): change this default (file in /tmp).
+	defaultSink Sink = &noopSink{} // TODO (blog): change this default (file in /tmp). id:243
 )
 
 // SetDefaultSink sets the sink where binary logs will be written to.

@@ -99,7 +99,7 @@ func RunTransactionOnce(c netcontext.Context, f func(netcontext.Context) error, 
 	res := &pb.CommitResponse{}
 	err := Call(c, "datastore_v3", "Commit", &t.transaction, res)
 	if ae, ok := err.(*APIError); ok {
-		/* TODO: restore this conditional
+		/* TODO: restore this conditional id:355
 		if appengine.IsDevAppServer() {
 		*/
 		// The Python Dev AppServer raises an ApplicationError with error code 2 (which is

@@ -284,14 +284,14 @@ func (m *Http) GetFullyDecodeReservedExpansion() bool {
 // characters except `[-_.~/0-9a-zA-Z]` are percent-encoded. Such variables
 // show up in the Discovery Document as `{+var}`.
 //
-// NOTE: While the single segment variable matches the semantics of
+// NOTE: While the single segment variable matches the semantics of id:317
 // [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.2
 // Simple String Expansion, the multi segment variable **does not** match
 // RFC 6570 Reserved Expansion. The reason is that the Reserved Expansion
 // does not expand special characters like `?` and `#`, which would lead
 // to invalid URLs.
-//
-// NOTE: the field paths in variables and in the `body` must not refer to
+// 
+// NOTE: the field paths in variables and in the `body` must not refer to id:192
 // repeated fields or map fields.
 type HttpRule struct {
 	// Selects methods to which this rule applies.
@@ -312,8 +312,8 @@ type HttpRule struct {
 	Pattern isHttpRule_Pattern `protobuf_oneof:"pattern"`
 	// The name of the request field whose value is mapped to the HTTP body, or
 	// `*` for mapping all fields not captured by the path pattern to the HTTP
-	// body. NOTE: the referred field must not be a repeated field and must be
-	// present at the top-level of request message type.
+	// body. NOTE: the referred field must not be a repeated field and must be id:356
+ // present at the top-level of request message type.
 	Body string `protobuf:"bytes,7,opt,name=body,proto3" json:"body,omitempty"`
 	// Optional. The name of the response field whose value is mapped to the HTTP
 	// body of response. Other response fields are ignored. When

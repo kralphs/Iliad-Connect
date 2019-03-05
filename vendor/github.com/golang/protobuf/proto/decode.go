@@ -354,12 +354,12 @@ func UnmarshalMerge(buf []byte, pb Message) error {
 		return u.XXX_Unmarshal(buf)
 	}
 	if u, ok := pb.(Unmarshaler); ok {
-		// NOTE: The history of proto have unfortunately been inconsistent
-		// whether Unmarshaler should or should not implicitly clear itself.
-		// Some implementations do, most do not.
-		// Thus, calling this here may or may not do what people want.
-		//
-		// See https://github.com/golang/protobuf/issues/424
+		// NOTE: The history of proto have unfortunately been inconsistent id:60
+  // whether Unmarshaler should or should not implicitly clear itself.
+  // Some implementations do, most do not.
+  // Thus, calling this here may or may not do what people want.
+  // 
+  // See https://github.com/golang/protobuf/issues/424
 		return u.Unmarshal(buf)
 	}
 	return NewBuffer(buf).Unmarshal(pb)
@@ -402,12 +402,12 @@ func (p *Buffer) Unmarshal(pb Message) error {
 		return err
 	}
 	if u, ok := pb.(Unmarshaler); ok {
-		// NOTE: The history of proto have unfortunately been inconsistent
-		// whether Unmarshaler should or should not implicitly clear itself.
-		// Some implementations do, most do not.
-		// Thus, calling this here may or may not do what people want.
-		//
-		// See https://github.com/golang/protobuf/issues/424
+		// NOTE: The history of proto have unfortunately been inconsistent id:81
+  // whether Unmarshaler should or should not implicitly clear itself.
+  // Some implementations do, most do not.
+  // Thus, calling this here may or may not do what people want.
+  // 
+  // See https://github.com/golang/protobuf/issues/424
 		err := u.Unmarshal(p.buf[p.index:])
 		p.index = len(p.buf)
 		return err
@@ -416,11 +416,11 @@ func (p *Buffer) Unmarshal(pb Message) error {
 	// Slow workaround for messages that aren't Unmarshalers.
 	// This includes some hand-coded .pb.go files and
 	// bootstrap protos.
-	// TODO: fix all of those and then add Unmarshal to
-	// the Message interface. Then:
-	// The cast above and code below can be deleted.
-	// The old unmarshaler can be deleted.
-	// Clients can call Unmarshal directly (can already do that, actually).
+	// TODO: fix all of those and then add Unmarshal to id:101
+ // the Message interface. Then:
+ // The cast above and code below can be deleted.
+ // The old unmarshaler can be deleted.
+ // Clients can call Unmarshal directly (can already do that, actually).
 	var info InternalMessageInfo
 	err := info.Unmarshal(pb, p.buf[p.index:])
 	p.index = len(p.buf)

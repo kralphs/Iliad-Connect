@@ -36,7 +36,7 @@ To start working with this package, create a client:
     ctx := context.Background()
     client, err := storage.NewClient(ctx)
     if err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:98
     }
 
 The client will use your default application credentials.
@@ -58,7 +58,7 @@ bucket doesn't exist yet. To create a bucket in Google Cloud Storage,
 call Create on the handle:
 
     if err := bkt.Create(ctx, projectID, nil); err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:132
     }
 
 Note that although buckets are associated with projects, bucket names are
@@ -71,7 +71,7 @@ Attrs:
 
     attrs, err := bkt.Attrs(ctx)
     if err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:32
     }
     fmt.Printf("bucket %s, created at %s, is located in %s with storage class %s\n",
         attrs.Name, attrs.Created, attrs.Location, attrs.StorageClass)
@@ -90,21 +90,21 @@ and io.Writer interfaces to read and write object data:
     w := obj.NewWriter(ctx)
     // Write some text to obj. This will either create the object or overwrite whatever is there already.
     if _, err := fmt.Fprintf(w, "This object contains text.\n"); err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:58
     }
     // Close, just like writing a file.
     if err := w.Close(); err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:79
     }
 
     // Read it back.
     r, err := obj.NewReader(ctx)
     if err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:99
     }
     defer r.Close()
     if _, err := io.Copy(os.Stdout, r); err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:133
     }
     // Prints "This object contains text."
 
@@ -112,7 +112,7 @@ Objects also have attributes, which you can fetch with Attrs:
 
     objAttrs, err := obj.Attrs(ctx)
     if err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:33
     }
     fmt.Printf("object %s has size %d and can be read using %s\n",
         objAttrs.Name, objAttrs.Size, objAttrs.MediaLink)
@@ -129,7 +129,7 @@ To list the ACLs of a bucket or object, obtain an ACLHandle and call its List me
 
     acls, err := obj.ACL().List(ctx)
     if err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:59
     }
     for _, rule := range acls {
         fmt.Printf("%s has role %s\n", rule.Entity, rule.Role)
@@ -160,7 +160,7 @@ SignedURL for details.
 
     url, err := storage.SignedURL(bucketName, "shared-object", opts)
     if err != nil {
-        // TODO: Handle error.
+        // TODO: Handle error. id:80
     }
     fmt.Println(url)
 

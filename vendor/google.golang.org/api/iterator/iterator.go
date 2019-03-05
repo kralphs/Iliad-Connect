@@ -110,7 +110,7 @@ func (pi *PageInfo) Remaining() int { return pi.bufLen() }
 func (pi *PageInfo) next() error {
 	pi.nextCalled = true
 	if pi.err != nil { // Once we get an error, always return it.
-		// TODO(jba): fix so users can retry on transient errors? Probably not worth it.
+		// TODO (jba): fix so users can retry on transient errors? Probably not worth it. id:273
 		return pi.err
 	}
 	if pi.nextPageCalled {

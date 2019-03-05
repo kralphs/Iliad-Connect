@@ -271,7 +271,7 @@ func Gettimeofday(tv *Timeval) (err error) {
 	return
 }
 
-// TODO
+// TODO  id:179
 func sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
 	return -1, ENOSYS
 }
@@ -445,15 +445,15 @@ func Flock(fd int, how int) (err error) {
 //sysnb	Times(tms *Tms) (ticks uintptr, err error)
 //sysnb	Umask(mask int) (oldmask int)
 //sysnb	Uname(buf *Utsname) (err error)
-//TODO umount
+//TODO umount id:343
 // //sys	Unmount(target string, flags int) (err error) = umount
-//sys   Unlink(path string) (err error)
-//sys   Unlinkat(dirfd int, path string, flags int) (err error)
-//sys	Unshare(flags int) (err error)
-//sys	Ustat(dev int, ubuf *Ustat_t) (err error)
-//sys	write(fd int, p []byte) (n int, err error)
-//sys	readlen(fd int, p *byte, np int) (n int, err error) = read
-//sys	writelen(fd int, p *byte, np int) (n int, err error) = write
+// sys   Unlink(path string) (err error)
+// sys   Unlinkat(dirfd int, path string, flags int) (err error)
+// sys	Unshare(flags int) (err error)
+// sys	Ustat(dev int, ubuf *Ustat_t) (err error)
+// sys	write(fd int, p []byte) (n int, err error)
+// sys	readlen(fd int, p *byte, np int) (n int, err error) = read
+// sys	writelen(fd int, p *byte, np int) (n int, err error) = write
 
 //sys	Dup2(oldfd int, newfd int) (err error)
 //sys	Fadvise(fd int, offset int64, length int64, advice int) (err error) = posix_fadvise64
@@ -472,16 +472,16 @@ func Flock(fd int, how int) (err error) {
 //sys	Pause() (err error)
 //sys	Pread(fd int, p []byte, offset int64) (n int, err error) = pread64
 //sys	Pwrite(fd int, p []byte, offset int64) (n int, err error) = pwrite64
-//TODO Select
+//TODO Select id:235
 // //sys	Select(nfd int, r *FdSet, w *FdSet, e *FdSet, timeout *Timeval) (n int, err error)
-//sys	Pselect(nfd int, r *FdSet, w *FdSet, e *FdSet, timeout *Timespec, sigmask *Sigset_t) (n int, err error)
-//sysnb	Setregid(rgid int, egid int) (err error)
-//sysnb	Setreuid(ruid int, euid int) (err error)
-//sys	Shutdown(fd int, how int) (err error)
-//sys	Splice(rfd int, roff *int64, wfd int, woff *int64, len int, flags int) (n int64, err error)
-//sys	Stat(path string, stat *Stat_t) (err error)
-//sys	Statfs(path string, buf *Statfs_t) (err error)
-//sys	Truncate(path string, length int64) (err error)
+// sys	Pselect(nfd int, r *FdSet, w *FdSet, e *FdSet, timeout *Timespec, sigmask *Sigset_t) (n int, err error)
+// sysnb	Setregid(rgid int, egid int) (err error)
+// sysnb	Setreuid(ruid int, euid int) (err error)
+// sys	Shutdown(fd int, how int) (err error)
+// sys	Splice(rfd int, roff *int64, wfd int, woff *int64, len int, flags int) (n int64, err error)
+// sys	Stat(path string, stat *Stat_t) (err error)
+// sys	Statfs(path string, buf *Statfs_t) (err error)
+// sys	Truncate(path string, length int64) (err error)
 
 //sys	bind(s int, addr unsafe.Pointer, addrlen _Socklen) (err error)
 //sys	connect(s int, addr unsafe.Pointer, addrlen _Socklen) (err error)

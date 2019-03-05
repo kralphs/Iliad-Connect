@@ -27,7 +27,7 @@ type spanAnnotator struct {
 	sp *trace.Span
 }
 
-// TODO: Remove NewSpanAnnotator at the next release.
+// TODO: Remove NewSpanAnnotator at the next release. id:205
 
 // NewSpanAnnotator returns a httptrace.ClientTrace which annotates
 // all emitted httptrace events on the provided Span.

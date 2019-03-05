@@ -11,7 +11,7 @@ if [[ $GOAPP == "true" ]]; then
   mkdir /tmp/sdk
   curl -o /tmp/sdk.zip "https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.68.zip"
   unzip -q /tmp/sdk.zip -d /tmp/sdk
-  # NOTE: Set the following env vars in the test script:
+  # NOTE: Set the following env vars in the test script: id:276
   # export PATH="$PATH:/tmp/sdk/go_appengine"
   # export APPENGINE_DEV_APPSERVER=/tmp/sdk/go_appengine/dev_appserver.py
 fi

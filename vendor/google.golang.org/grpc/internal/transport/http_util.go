@@ -299,10 +299,10 @@ func (d *decodeState) processHeaderField(f hpack.HeaderField) error {
 			return status.Errorf(codes.Internal, "transport: received the unexpected content-type %q", f.Value)
 		}
 		d.contentSubtype = contentSubtype
-		// TODO: do we want to propagate the whole content-type in the metadata,
-		// or come up with a way to just propagate the content-subtype if it was set?
-		// ie {"content-type": "application/grpc+proto"} or {"content-subtype": "proto"}
-		// in the metadata?
+		// TODO: do we want to propagate the whole content-type in the metadata, id:287
+  // or come up with a way to just propagate the content-subtype if it was set?
+  // ie {"content-type": "application/grpc+proto"} or {"content-subtype": "proto"}
+  // in the metadata?
 		d.addMetadata(f.Name, f.Value)
 	case "grpc-encoding":
 		d.encoding = f.Value
@@ -407,7 +407,7 @@ func div(d, r time.Duration) int64 {
 	return int64(d / r)
 }
 
-// TODO(zhaoq): It is the simplistic and not bandwidth efficient. Improve it.
+// TODO (zhaoq): It is the simplistic and not bandwidth efficient. Improve it. id:328
 func encodeTimeout(t time.Duration) string {
 	if t <= 0 {
 		return "0n"

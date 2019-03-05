@@ -59,9 +59,9 @@ func DiscardUnknown(m Message) {
 		m.XXX_DiscardUnknown()
 		return
 	}
-	// TODO: Dynamically populate a InternalMessageInfo for legacy messages,
-	// but the master branch has no implementation for InternalMessageInfo,
-	// so it would be more work to replicate that approach.
+	// TODO: Dynamically populate a InternalMessageInfo for legacy messages, id:135
+ // but the master branch has no implementation for InternalMessageInfo,
+ // so it would be more work to replicate that approach.
 	discardLegacy(m)
 }
 
@@ -219,7 +219,7 @@ func (di *discardInfo) computeDiscardInfo() {
 			case isPointer || isSlice:
 				panic(fmt.Sprintf("%v.%s cannot be a pointer to a interface or a slice of interface values", t, f.Name))
 			default: // E.g., interface{}
-				// TODO: Make this faster?
+				// TODO: Make this faster? id:35
 				dfi.discard = func(src pointer) {
 					su := src.asPointerTo(tf).Elem()
 					if !su.IsNil() {

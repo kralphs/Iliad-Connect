@@ -276,7 +276,7 @@ func newClientStream(ctx context.Context, desc *StreamDesc, cc *ClientConn, meth
 
 	cs.callInfo.stream = cs
 	// Only this initial attempt has stats/tracing.
-	// TODO(dfawley): move to newAttempt when per-attempt stats are implemented.
+	// TODO (dfawley): move to newAttempt when per-attempt stats are implemented. id:405
 	if err := cs.newAttemptLocked(sh, trInfo); err != nil {
 		cs.finish(err)
 		return nil, err
@@ -391,9 +391,9 @@ type clientStream struct {
 	firstAttempt            bool       // if true, transparent retry is valid
 	numRetries              int        // exclusive of transparent retry attempt(s)
 	numRetriesSincePushback int        // retries since pushback; to reset backoff
-	finished                bool       // TODO: replace with atomic cmpxchg or sync.Once?
+	finished                bool       // TODO: replace with atomic cmpxchg or sync.Once? id:409
 	attempt                 *csAttempt // the active client stream attempt
-	// TODO(hedging): hedging will have multiple attempts simultaneously.
+	// TODO (hedging): hedging will have multiple attempts simultaneously. id:292
 	committed  bool                       // active attempt committed for retry?
 	buffer     []func(a *csAttempt) error // operations to replay on retry
 	bufferSize int                        // current size of buffer
@@ -469,8 +469,8 @@ func (cs *clientStream) shouldRetry(err error) error {
 			return err
 		}
 
-		// TODO(retry): Move down if the spec changes to not check server pushback
-		// before considering this a failure for throttling.
+		// TODO (retry): Move down if the spec changes to not check server pushback id:333
+  // before considering this a failure for throttling.
 		sps := cs.attempt.s.Trailer()["grpc-retry-pushback-ms"]
 		if len(sps) == 1 {
 			var e error
@@ -522,8 +522,8 @@ func (cs *clientStream) shouldRetry(err error) error {
 		cs.numRetriesSincePushback++
 	}
 
-	// TODO(dfawley): we could eagerly fail here if dur puts us past the
-	// deadline, but unsure if it is worth doing.
+	// TODO (dfawley): we could eagerly fail here if dur puts us past the id:397
+ // deadline, but unsure if it is worth doing.
 	t := time.NewTimer(dur)
 	select {
 	case <-t.C:
@@ -680,7 +680,7 @@ func (cs *clientStream) SendMsg(m interface{}) (err error) {
 		return err
 	}
 	hdr, payload := msgHeader(data, compData)
-	// TODO(dfawley): should we be checking len(data) instead?
+	// TODO (dfawley): should we be checking len(data) instead? id:406
 	if len(payload) > *cs.callInfo.maxSendMessageSize {
 		return status.Errorf(codes.ResourceExhausted, "trying to send message larger than max (%d vs. %d)", len(payload), *cs.callInfo.maxSendMessageSize)
 	}
@@ -745,7 +745,7 @@ func (cs *clientStream) RecvMsg(m interface{}) error {
 
 func (cs *clientStream) CloseSend() error {
 	if cs.sentLast {
-		// TODO: return an error and finish the stream instead, due to API misuse?
+		// TODO: return an error and finish the stream instead, due to API misuse? id:410
 		return nil
 	}
 	cs.sentLast = true
@@ -883,7 +883,7 @@ func (a *csAttempt) recvMsg(m interface{}, payInfo *payloadInfo) (err error) {
 			Client:   true,
 			RecvTime: time.Now(),
 			Payload:  m,
-			// TODO truncate large payload.
+			// TODO truncate large payload. id:293
 			Data:   payInfo.uncompressedBytes,
 			Length: len(payInfo.uncompressedBytes),
 		})
@@ -972,7 +972,7 @@ func (ac *addrConn) newClientStream(ctx context.Context, desc *StreamDesc, metho
 	ac.mu.Unlock()
 
 	if t == nil {
-		// TODO: return RPC error here?
+		// TODO: return RPC error here? id:334
 		return nil, errors.New("transport provided is nil")
 	}
 	// defaultCallInfo contains unnecessary info(i.e. failfast, maxRetryRPCBufferSize), so we just initialize an empty struct.
@@ -1108,7 +1108,7 @@ func (as *addrConnStream) Trailer() metadata.MD {
 
 func (as *addrConnStream) CloseSend() error {
 	if as.sentLast {
-		// TODO: return an error and finish the stream instead, due to API misuse?
+		// TODO: return an error and finish the stream instead, due to API misuse? id:398
 		return nil
 	}
 	as.sentLast = true
@@ -1151,7 +1151,7 @@ func (as *addrConnStream) SendMsg(m interface{}) (err error) {
 		return err
 	}
 	hdr, payld := msgHeader(data, compData)
-	// TODO(dfawley): should we be checking len(data) instead?
+	// TODO (dfawley): should we be checking len(data) instead? id:407
 	if len(payld) > *as.callInfo.maxSendMessageSize {
 		return status.Errorf(codes.ResourceExhausted, "trying to send message larger than max (%d vs. %d)", len(payld), *as.callInfo.maxSendMessageSize)
 	}
@@ -1396,7 +1396,7 @@ func (ss *serverStream) SendMsg(m interface{}) (err error) {
 		return err
 	}
 	hdr, payload := msgHeader(data, compData)
-	// TODO(dfawley): should we be checking len(data) instead?
+	// TODO (dfawley): should we be checking len(data) instead? id:411
 	if len(payload) > ss.maxSendMessageSize {
 		return status.Errorf(codes.ResourceExhausted, "trying to send message larger than max (%d vs. %d)", len(payload), ss.maxSendMessageSize)
 	}
@@ -1469,7 +1469,7 @@ func (ss *serverStream) RecvMsg(m interface{}) (err error) {
 		ss.statsHandler.HandleRPC(ss.s.Context(), &stats.InPayload{
 			RecvTime: time.Now(),
 			Payload:  m,
-			// TODO truncate large payload.
+			// TODO truncate large payload. id:294
 			Data:   payInfo.uncompressedBytes,
 			Length: len(payInfo.uncompressedBytes),
 		})

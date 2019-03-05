@@ -25,10 +25,10 @@ import (
 	"golang.org/x/text/unicode/norm"
 )
 
-// NOTE: Unlike common practice in Go APIs, the functions will return a
+// NOTE: Unlike common practice in Go APIs, the functions will return a id:229
 // sanitized domain name in case of errors. Browsers sometimes use a partially
 // evaluated string as lookup.
-// TODO: the current error handling is, in my opinion, the least opinionated.
+// TODO: the current error handling is, in my opinion, the least opinionated. id:258
 // Other strategies are also viable, though:
 // Option 1) Return an empty string in case of error, but allow the user to
 //    specify explicitly which errors to ignore.
@@ -109,7 +109,7 @@ func StrictDomainName(use bool) Option {
 	}
 }
 
-// NOTE: the following options pull in tables. The tables should not be linked
+// NOTE: the following options pull in tables. The tables should not be linked id:299
 // in as long as the options are not used.
 
 // BidiRule enables the Bidi rule as defined in RFC 5893. Any application
@@ -277,9 +277,9 @@ var (
 		bidirule:        bidirule.ValidString,
 	}}
 
-	// TODO: profiles
-	// Register: recommended for approving domain names: don't do any mappings
-	// but rather reject on invalid input. Bundle or block deviation characters.
+	// TODO: profiles id:174
+ // Register: recommended for approving domain names: don't do any mappings
+ // but rather reject on invalid input. Bundle or block deviation characters.
 )
 
 type labelError struct{ label, code_ string }
@@ -309,9 +309,9 @@ func (p *Profile) process(s string, toASCII bool) (string, error) {
 		for ; len(s) > 0 && s[0] == '.'; s = s[1:] {
 		}
 	}
-	// TODO: allow for a quick check of the tables data.
-	// It seems like we should only create this error on ToASCII, but the
-	// UTS 46 conformance tests suggests we should always check this.
+	// TODO: allow for a quick check of the tables data. id:338
+ // It seems like we should only create this error on ToASCII, but the
+ // UTS 46 conformance tests suggests we should always check this.
 	if err == nil && p.verifyDNSLength && s == "" {
 		err = &labelError{s, "A4"}
 	}
@@ -390,16 +390,16 @@ func (p *Profile) process(s string, toASCII bool) (string, error) {
 }
 
 func normalize(p *Profile, s string) (mapped string, isBidi bool, err error) {
-	// TODO: consider first doing a quick check to see if any of these checks
-	// need to be done. This will make it slower in the general case, but
-	// faster in the common case.
+	// TODO: consider first doing a quick check to see if any of these checks id:230
+ // need to be done. This will make it slower in the general case, but
+ // faster in the common case.
 	mapped = norm.NFC.String(s)
 	isBidi = bidirule.DirectionString(mapped) == bidi.RightToLeft
 	return mapped, isBidi, nil
 }
 
 func validateRegistration(p *Profile, s string) (idem string, bidi bool, err error) {
-	// TODO: filter need for normalization in loop below.
+	// TODO: filter need for normalization in loop below. id:259
 	if !norm.NFC.IsNormalString(s) {
 		return s, false, &labelError{s, "V1"}
 	}
@@ -411,8 +411,8 @@ func validateRegistration(p *Profile, s string) (idem string, bidi bool, err err
 		bidi = bidi || info(v).isBidi(s[i:])
 		// Copy bytes not copied so far.
 		switch p.simplify(info(v).category()) {
-		// TODO: handle the NV8 defined in the Unicode idna data set to allow
-		// for strict conformance to IDNA2008.
+		// TODO: handle the NV8 defined in the Unicode idna data set to allow id:300
+  // for strict conformance to IDNA2008.
 		case valid, deviation:
 		case disallowed, mapped, unknown, ignored:
 			r, _ := utf8.DecodeRuneInString(s[i:])
@@ -427,8 +427,8 @@ func (c info) isBidi(s string) bool {
 	if !c.isMapped() {
 		return c&attributesMask == rtl
 	}
-	// TODO: also store bidi info for mapped data. This is possible, but a bit
-	// cumbersome and not for the common case.
+	// TODO: also store bidi info for mapped data. This is possible, but a bit id:175
+ // cumbersome and not for the common case.
 	p, _ := bidi.LookupString(s)
 	switch p.Class() {
 	case bidi.R, bidi.AL, bidi.AN:
@@ -494,7 +494,7 @@ func validateAndMap(p *Profile, s string) (vm string, bidi bool, err error) {
 		if norm.NFC.QuickSpan(b) != len(b) {
 			b = norm.NFC.Bytes(b)
 		}
-		// TODO: the punycode converters require strings as input.
+		// TODO: the punycode converters require strings as input. id:339
 		s = string(b)
 	}
 	return s, bidi, err
@@ -582,7 +582,7 @@ func (p *Profile) simplify(cat category) category {
 			cat = valid
 		}
 	case validNV8, validXV8:
-		// TODO: handle V2008
+		// TODO: handle V2008 id:231
 		cat = valid
 	}
 	return cat
@@ -592,8 +592,8 @@ func validateFromPunycode(p *Profile, s string) error {
 	if !norm.NFC.IsNormalString(s) {
 		return &labelError{s, "V1"}
 	}
-	// TODO: detect whether string may have to be normalized in the following
-	// loop.
+	// TODO: detect whether string may have to be normalized in the following id:260
+ // loop.
 	for i := 0; i < len(s); {
 		v, sz := trie.lookupString(s[i:])
 		if sz == 0 {
@@ -688,7 +688,7 @@ func (p *Profile) validateLabel(s string) (err error) {
 	if s[0] == '-' || s[len(s)-1] == '-' {
 		return &labelError{s, "V3"}
 	}
-	// TODO: merge the use of this in the trie.
+	// TODO: merge the use of this in the trie. id:301
 	v, sz := trie.lookupString(s)
 	x := info(v)
 	if x.isModifier() {

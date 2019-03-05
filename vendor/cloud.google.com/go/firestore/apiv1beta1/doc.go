@@ -17,9 +17,9 @@
 // Package firestore is an auto-generated package for the
 // Google Cloud Firestore API.
 //
-//   NOTE: This package is in beta. It is not stable, and may be subject to changes.
-//
-//
+//   NOTE: This package is in beta. It is not stable, and may be subject to changes. id:72
+// 
+// 
 // Use the client at cloud.google.com/go/firestore in preference to this.
 package firestore // import "cloud.google.com/go/firestore/apiv1beta1"
 
