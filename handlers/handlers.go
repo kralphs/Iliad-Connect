@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/csrf"
+	"google.golang.org/api/iterator"
 	//	firebase "firebase.google.com/go"
 )
 
@@ -15,7 +16,7 @@ type templateParams struct {
 	Name         string
 	Photo        string
 	Clio         bool
-	Google       bool
+	Email        bool
 	Subscription bool
 }
 
@@ -57,15 +58,34 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	params.Name = user.DisplayName
 	params.Photo = user.PhotoURL
 
-	doc, err := firestoreClient.Collection("users").Doc(user.UID).Get(r.Context())
+	userRef := firestoreClient.Collection("users").Doc(user.UID)
+	userDoc, err := userRef.Get(r.Context())
 	if err != nil {
 		log.Printf("error retrieving user information: %v\n", err)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
+	// Checks for Oauth tokens stored against the user
+	tokens := userRef.Collection("tokens").DocumentRefs(r.Context())
+	for {
+		token, err := tokens.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			log.Printf("Error checking tokens: %v\n", err)
+		}
+		switch token.ID {
+		case "email":
+			params.Email = true
+		case "clio":
+			params.Clio = true
+		}
+	}
+
 	// Temporarily restricting access to users with the beta flag set to true
-	if doc.Data()["beta"] == true {
+	if userDoc.Data()["beta"] == true {
 		profileTemplate.Execute(w, params)
 		return
 	}

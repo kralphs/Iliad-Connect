@@ -300,7 +300,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Clio Account</div>
-                      <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-on="Linked" data-off="Not Linked" data-size="sm" id="toggleClio">
+                      <input type="checkbox" data-toggle="toggle" data-onstyle="primary" data-on="Linked" data-off="Not Linked" data-size="sm" id="toggleClio" {{if .Clio}} checked {{end}}>
                     </div>
                     <div class="col-auto">
                       <img src="html/profile/img/Clio-Logomark.png" width="45">
@@ -317,7 +317,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Email Account</div>
-                      <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-on="Linked" data-off="Not Linked" data-size="sm" id="toggleEmail">
+                      <input type="checkbox" data-toggle="toggle" data-onstyle="primary" data-on="Linked" data-off="Not Linked" data-size="sm" id="toggleEmail" {{if .Email}} checked {{end}}>
                     </div>
                     <div class="col-auto">
                       <i class="far fa-envelope fa-2x text-gray-300"></i>

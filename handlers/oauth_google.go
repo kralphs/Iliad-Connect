@@ -60,7 +60,7 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("google").Set(r.Context(), token)
+	firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("email").Set(r.Context(), token)
 
 	http.Redirect(w, r, "/profile", http.StatusTemporaryRedirect)
 }

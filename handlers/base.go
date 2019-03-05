@@ -81,6 +81,7 @@ func New() http.Handler {
 	// oauth_Clio
 	mux.HandleFunc("/auth/clio/login", oauthClioLogin)
 	mux.HandleFunc("/auth/clio/callback", oauthClioCallback)
+	mux.HandleFunc("/auth/clio/logout", oauthClioLogout)
 
 	// oauth_Google
 	mux.HandleFunc("/auth/google/login", oauthGoogleLogin)
