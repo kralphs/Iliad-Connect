@@ -1,17 +1,26 @@
 {
-  "noHelp": true,
-  "sync": {
-    "useImdoneioForPriority": true,
-    "name": "kralphs/Iliad-Connect",
-    "id": "5c7eb73701706c3424b4f337"
-  },
-  "marked": {
-    "langPrefix": "language-",
-    "smartLists": true,
-    "pedantic": false,
-    "breaks": false,
-    "tables": true,
-    "gfm": true
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs|flow-typed|imdone-export.json)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  ],
+  "watcher": true,
+  "keepEmptyPriority": true,
+  "code": {
+    "include_lists": [
+      "TODO",
+      "DOING",
+      "DONE",
+      "PLANNING",
+      "FIXME",
+      "ARCHIVE",
+      "HACK",
+      "CHANGED",
+      "XXX",
+      "IDEA",
+      "NOTE",
+      "REVIEW",
+      "MARK",
+      "HELP"
+    ]
   },
   "lists": [
     {
@@ -43,27 +52,18 @@
       "hidden": false
     }
   ],
-  "code": {
-    "include_lists": [
-      "TODO",
-      "DOING",
-      "DONE",
-      "PLANNING",
-      "FIXME",
-      "ARCHIVE",
-      "HACK",
-      "CHANGED",
-      "XXX",
-      "IDEA",
-      "NOTE",
-      "REVIEW",
-      "MARK",
-      "HELP"
-    ]
+  "marked": {
+    "langPrefix": "language-",
+    "smartLists": true,
+    "pedantic": false,
+    "breaks": false,
+    "tables": true,
+    "gfm": true
   },
-  "keepEmptyPriority": true,
-  "watcher": true,
-  "exclude": [
-    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs|flow-typed|imdone-export.json)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
-  ]
+  "sync": {
+    "useImdoneioForPriority": true,
+    "name": "kralphs/Iliad-Connect",
+    "id": "5c7eb73701706c3424b4f337"
+  },
+  "noHelp": true
 }
