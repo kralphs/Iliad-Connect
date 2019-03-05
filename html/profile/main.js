@@ -4,24 +4,19 @@ document.getElementById("toggleScanning").parentNode.addEventListener("click", t
 
 function toggleClio(e) {
     if(document.getElementById("toggleClio").checked){
-        logoutClio().then((xhr)=> {alert("Successful")}, (xhr) => {e.stopPropagation()})
+        logoutClio().then((xhr)=> {}, (xhr) => {e.stopPropagation()})
     } else {
         window.location.assign("/auth/clio/login");
     }
 };
 
 function toggleEmail(e) {
+    // TODO: Add way to inform which email provider is used
+    var provider = "google"
     if(document.getElementById("toggleEmail").checked){
-//        logoutClio()
-        if (Math.random() < 0.5){
-            alert("Logout Successful")
-        } else {
-            alert("Logout Failed")
-            e.stopPropagation()
-        }
+        logoutEmail(provider).then((xhr)=> {}, (xhr) => {e.stopPropagation()})
     } else {
-//        window.location.assign("/auth/google/login");
-        alert("Redirect to Login")
+        window.location.assign("/auth/" + provider + "/login");
     }
 };
 
@@ -54,3 +49,21 @@ function logoutClio(){
     });
 }
 
+function logoutEmail(provider){
+    var xhr = new XMLHttpRequest;
+
+    return new Promise((resolve, reject) => {
+        xhr.onload = function () {
+            if (xhr.readyState=== 4 && xhr.status === 200) {
+              resolve(xhr);
+            } else {
+              reject({
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                });
+            };
+          };
+          xhr.open('GET', '/auth/' + provider + '/logout', true);
+          xhr.send(null);      
+    });
+}

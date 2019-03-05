@@ -34,7 +34,6 @@ func oauthGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	*/
 
 	u := googleOAuthConfig.AuthCodeURL(oauthState, oauth2.AccessTypeOffline, authPrompt)
-	log.Println(u)
 	http.Redirect(w, r, u, http.StatusTemporaryRedirect)
 }
 
@@ -63,4 +62,21 @@ func oauthGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("email").Set(r.Context(), token)
 
 	http.Redirect(w, r, "/profile", http.StatusTemporaryRedirect)
+}
+
+func oauthGoogleLogout(w http.ResponseWriter, r *http.Request) {
+	user, err := checkSession(r)
+	if err != nil {
+		log.Printf("error retrieving user information: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	_, err = firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("email").Delete(r.Context())
+	if err != nil {
+		log.Printf("Error deleting Email token: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

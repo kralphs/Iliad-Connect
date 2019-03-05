@@ -86,6 +86,7 @@ func New() http.Handler {
 	// oauth_Google
 	mux.HandleFunc("/auth/google/login", oauthGoogleLogin)
 	mux.HandleFunc("/auth/google/callback", oauthGoogleCallback)
+	mux.HandleFunc("/auth/google/logout", oauthGoogleLogout)
 
 	// clio_handlers
 	mux.HandleFunc("/upload", uploadHandler)
