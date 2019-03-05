@@ -39,42 +39,19 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func profileHandler(w http.ResponseWriter, r *http.Request) {
 	// We can obtain the session token from the requests cookies, which come with every request
-	c, err := r.Cookie("session_token")
+	user, err := checkSession(r)
 	if err != nil {
-		if err == http.ErrNoCookie {
-			// If the cookie is not set, return an unauthorized status
+		switch err.Error() {
+		case "Unauthorized":
 			w.WriteHeader(http.StatusUnauthorized)
 			return
+		case "Bad Request":
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		default:
+			w.WriteHeader(http.StatusInternalServerError)
+			return
 		}
-		// For any other type of error, return a bad request status
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	sessionToken := c.Value
-	log.Println(sessionToken)
-
-	cache := pool.Get()
-	defer cache.Close()
-	// We then get the name of the user from our cache, where we set the session token
-	response, err := cache.Do("GET", sessionToken)
-	if err != nil {
-		// If there is an error fetching from cache, return an internal server error status
-		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	log.Println("got the token")
-	if response == nil {
-		// If the session token is not present in cache, return an unauthorized error
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	user, err := Auth.GetUser(r.Context(), string(response.([]byte)))
-	if err != nil {
-		log.Printf("error retrieving user account: %v\n", err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
 	}
 
 	params.Name = user.DisplayName
@@ -87,6 +64,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Temporarily restricting access to users with the beta flag set to true
 	if doc.Data()["beta"] == true {
 		profileTemplate.Execute(w, params)
 		return

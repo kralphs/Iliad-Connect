@@ -43,48 +43,43 @@ func oauthClioCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c, err := r.Cookie("session_token")
+	user, err := checkSession(r)
 	if err != nil {
-		if err == http.ErrNoCookie {
-			// If the cookie is not set, return an unauthorized status
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		// For any other type of error, return a bad request status
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-	sessionToken := c.Value
-
-	// We then get the name of the user from our cache, where we set the session token
-	cache := pool.Get()
-	defer cache.Close()
-	response, err := cache.Do("GET", sessionToken)
-	if err != nil {
-		// If there is an error fetching from cache, return an internal server error status
+		log.Printf("Error retrieving user information: %v\n", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	if response == nil {
-		// If the session token is not present in cache, return an unauthorized error
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	user, err := Auth.GetUser(r.Context(), string(response.([]byte)))
-	if err != nil {
-		log.Fatalf("error retrieving user information: %v\n", err)
 		return
 	}
 
 	token, err := clioOAuthConfig.Exchange(context.Background(), r.FormValue("code"))
 	if err != nil {
-		log.Println("token exchange failed")
+		log.Printf("Token exchange failed %v\n", err)
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
-	firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("clio").Set(r.Context(), token)
+	_, err = firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("clio").Set(r.Context(), token)
+	if err != nil {
+		log.Printf("Failed to write token to Firestore: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	http.Redirect(w, r, "/profile", http.StatusTemporaryRedirect)
+}
+
+func oauthClioLogout(w http.ResponseWriter, r *http.Request) {
+	user, err := checkSession(r)
+	if err != nil {
+		log.Printf("error retrieving user information: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	_, err = firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("clio").Delete(r.Context())
+	if err != nil {
+		log.Printf("Error deleting Clio token: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

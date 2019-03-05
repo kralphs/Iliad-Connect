@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -104,12 +105,6 @@ func New() http.Handler {
 	return mux
 }
 
-func sessionID() (string, error) {
-	b := make([]byte, 32)
-	_, err := rand.Read(b)
-	return base64.URLEncoding.EncodeToString(b), err
-}
-
 func init() {
 	var err error
 
@@ -146,4 +141,42 @@ func generateStateOauthCookie(w http.ResponseWriter) string {
 	http.SetCookie(w, &cookie)
 
 	return state
+}
+
+func sessionID() (string, error) {
+	b := make([]byte, 32)
+	_, err := rand.Read(b)
+	return base64.URLEncoding.EncodeToString(b), err
+}
+
+func checkSession(r *http.Request) (*auth.UserRecord, error) {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			return nil, err
+		}
+		// For any other type of error, return a bad request status
+		return nil, errors.New("Bad Request")
+	}
+	sessionToken := c.Value
+
+	cache := pool.Get()
+	defer cache.Close()
+	// We then get the name of the user from our cache, where we set the session token
+	response, err := cache.Do("GET", sessionToken)
+	if err != nil {
+		// If there is an error fetching from cache, return an internal server error status
+		return nil, err
+	}
+
+	if response == nil {
+		return nil, errors.New("Unauthorized")
+	}
+
+	user, err := Auth.GetUser(r.Context(), string(response.([]byte)))
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
