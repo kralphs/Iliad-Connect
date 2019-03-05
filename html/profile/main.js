@@ -11,7 +11,7 @@ function toggleClio(e) {
 };
 
 function toggleEmail(e) {
-    // TODO: Add way to inform which email provider is used
+    // TODO: Add way to inform which email provider is used id:413
     var provider = "google"
     if(document.getElementById("toggleEmail").checked){
         logoutEmail(provider).then((xhr)=> {}, (xhr) => {e.stopPropagation()})
