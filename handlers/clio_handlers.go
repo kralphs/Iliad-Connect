@@ -1,33 +1,51 @@
 package handlers
 
 import (
+	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"net/url"
 )
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("Upload Handler")
+
+	type Data struct {
+		MatterID string `json:"matterID"`
+		Link     string `json:"link"`
+	}
+
+	type Payload struct {
+		Data `json:"data"`
+	}
+
 	// Redirects back to root if URL misrouted
 	if r.URL.Path != "/upload" {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	q := r.URL.Query()
-	link, err := url.ParseRequestURI(q.Get("link"))
-	if err != nil {
-		http.Error(w, "Link missing or invalid. "+err.Error(), http.StatusBadRequest)
-		return
-	}
+	var payload Payload
 
 	client := &http.Client{}
 
-	resp, err := client.Get(link.String())
+	body, err := ioutil.ReadAll(r.Body)
+	w.Write(body)
+	json.Unmarshal(body, &payload)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	log.Println(payload)
+
+	resp, err := client.Get(payload.Data.Link)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	body, err = ioutil.ReadAll(resp.Body)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(body))
