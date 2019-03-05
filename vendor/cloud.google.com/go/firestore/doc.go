@@ -34,7 +34,7 @@ To start working with this package, create a client with a project ID:
 	ctx := context.Background()
 	client, err := firestore.NewClient(ctx, "projectID")
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:126
 	}
 
 CollectionRefs and DocumentRefs
@@ -60,7 +60,7 @@ Call its Data method to obtain the entire document contents as a map.
 
 	docsnap, err := ny.Get(ctx)
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:26
 	}
 	dataMap := docsnap.Data()
 	fmt.Println(dataMap)
@@ -77,7 +77,7 @@ we can extract the document's data into a value of type State:
 
 	var nyData State
 	if err := docsnap.DataTo(&nyData); err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:52
 	}
 
 Note that this client supports struct tags beginning with "firestore:" that work like
@@ -91,10 +91,10 @@ Client.GetAll.
 		states.Doc("Wisconsin"), states.Doc("Ohio"),
 	})
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:73
 	}
 	for _, ds := range docsnaps {
-		_ = ds // TODO: Use ds.
+		_ = ds // TODO: Use ds. id:93
 	}
 
 
@@ -108,7 +108,7 @@ Create creates a new document.
 		Population: 19.8,
 	})
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:127
 	}
 	fmt.Println(wr)
 
@@ -141,7 +141,7 @@ write happen atomically with a single RPC.
 
 	docsnap, err = ca.Get(ctx)
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:27
 	}
 	_, err = ca.Update(ctx,
 		[]firestore.Update{{Path: "capital", Value: "Sacramento"}},
@@ -182,7 +182,7 @@ the other Google Cloud Client iterators.
 			break
 		}
 		if err != nil {
-			// TODO: Handle error.
+			// TODO: Handle error. id:53
 		}
 		fmt.Println(doc.Data())
 	}
@@ -212,7 +212,7 @@ read and write methods of the Transaction passed to it.
 		return tx.Update(ny, []firestore.Update{{Path: "pop", Value: pop.(float64) + 0.2}})
 	})
 	if err != nil {
-		// TODO: Handle error.
+		// TODO: Handle error. id:74
 	}
 */
 package firestore

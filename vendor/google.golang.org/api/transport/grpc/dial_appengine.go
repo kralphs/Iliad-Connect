@@ -27,8 +27,8 @@ import (
 )
 
 func init() {
-	// NOTE: dev_appserver doesn't currently support SSL.
-	// When it does, this code can be removed.
+	// NOTE: dev_appserver doesn't currently support SSL. id:314
+ // When it does, this code can be removed.
 	if appengine.IsDevAppServer() {
 		return
 	}

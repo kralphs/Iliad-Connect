@@ -35,7 +35,7 @@ type scStateUpdate struct {
 }
 
 // scStateUpdateBuffer is an unbounded channel for scStateChangeTuple.
-// TODO make a general purpose buffer that uses interface{}.
+// TODO make a general purpose buffer that uses interface{}. id:318
 type scStateUpdateBuffer struct {
 	c       chan *scStateUpdate
 	mu      sync.Mutex
@@ -267,8 +267,8 @@ func (acbw *acBalancerWrapper) UpdateAddresses(addrs []resolver.Address) {
 		// Set old ac.acbw to nil so the Shutdown state update will be ignored
 		// by balancer.
 		//
-		// TODO(bar) the state transition could be wrong when tearDown() old ac
-		// and creating new ac, fix the transition.
+		// TODO (bar) the state transition could be wrong when tearDown() old ac id:193
+// and creating new ac, fix the transition.
 		acbw.ac.acbw = nil
 		acbw.ac.mu.Unlock()
 		acState := acbw.ac.getState()

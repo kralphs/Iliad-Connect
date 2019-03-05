@@ -340,7 +340,7 @@ func newHTTP2Client(connectCtx, ctx context.Context, addr TargetInfo, opts Conne
 }
 
 func (t *http2Client) newStream(ctx context.Context, callHdr *CallHdr) *Stream {
-	// TODO(zhaoq): Handle uint32 overflow of Stream.id.
+	// TODO (zhaoq): Handle uint32 overflow of Stream.id. id:283
 	s := &Stream{
 		done:           make(chan struct{}),
 		method:         callHdr.Method,
@@ -391,9 +391,9 @@ func (t *http2Client) createHeaderFields(ctx context.Context, callHdr *CallHdr) 
 	if err != nil {
 		return nil, err
 	}
-	// TODO(mmukhi): Benchmark if the performance gets better if count the metadata and other header fields
-	// first and create a slice of that exact size.
-	// Make the slice of certain predictable size to reduce allocations made by append.
+	// TODO (mmukhi): Benchmark if the performance gets better if count the metadata and other header fields id:324
+ // first and create a slice of that exact size.
+ // Make the slice of certain predictable size to reduce allocations made by append.
 	hfLen := 7 // :method, :scheme, :path, :authority, content-type, user-agent, te
 	hfLen += len(authData) + len(callAuthData)
 	headerFields := make([]hpack.HeaderField, 0, hfLen)
@@ -413,7 +413,7 @@ func (t *http2Client) createHeaderFields(ctx context.Context, callHdr *CallHdr) 
 	}
 	if dl, ok := ctx.Deadline(); ok {
 		// Send out timeout regardless its value. The server can detect timeout context by itself.
-		// TODO(mmukhi): Perhaps this field should be updated when actually writing out to the wire.
+		// TODO (mmukhi): Perhaps this field should be updated when actually writing out to the wire. id:388
 		timeout := dl.Sub(time.Now())
 		headerFields = append(headerFields, hpack.HeaderField{Name: "grpc-timeout", Value: encodeTimeout(timeout)})
 	}
@@ -831,7 +831,7 @@ func (t *http2Client) Write(s *Stream, hdr []byte, data []byte, opts *Options) e
 		hdr = append(hdr, data[:emptyLen]...)
 		data = data[emptyLen:]
 		df.h, df.d = hdr, data
-		// TODO(mmukhi): The above logic in this if can be moved to loopyWriter's data handler.
+		// TODO (mmukhi): The above logic in this if can be moved to loopyWriter's data handler. id:363
 		if err := s.wq.get(int32(len(hdr) + len(data))); err != nil {
 			return err
 		}
@@ -937,9 +937,9 @@ func (t *http2Client) handleData(f *http2.DataFrame) {
 				t.controlBuf.put(&outgoingWindowUpdate{s.id, w})
 			}
 		}
-		// TODO(bradfitz, zhaoq): A copy is required here because there is no
-		// guarantee f.Data() is consumed before the arrival of next frame.
-		// Can this copy be eliminated?
+		// TODO (bradfitz, zhaoq): A copy is required here because there is no id:380
+  // guarantee f.Data() is consumed before the arrival of next frame.
+  // Can this copy be eliminated?
 		if len(f.Data()) > 0 {
 			data := make([]byte, len(f.Data()))
 			copy(data, f.Data())
@@ -1190,9 +1190,9 @@ func (t *http2Client) operateHeaders(frame *http2.MetaHeadersFrame) {
 // reader runs as a separate goroutine in charge of reading data from network
 // connection.
 //
-// TODO(zhaoq): currently one reader per transport. Investigate whether this is
+// TODO (zhaoq): currently one reader per transport. Investigate whether this is id:284
 // optimal.
-// TODO(zhaoq): Check the validity of the incoming frame sequence.
+// TODO (zhaoq): Check the validity of the incoming frame sequence. id:325
 func (t *http2Client) reader() {
 	defer close(t.readerDone)
 	// Check the validity of server preface.

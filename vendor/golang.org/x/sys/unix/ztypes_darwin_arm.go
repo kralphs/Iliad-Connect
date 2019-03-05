@@ -1,4 +1,4 @@
-// NOTE: cgo can't generate struct Stat_t and struct Statfs_t yet
+// NOTE: cgo can't generate struct Stat_t and struct Statfs_t yet id:182
 // Created by cgo -godefs - DO NOT EDIT
 // cgo -godefs types_darwin.go
 

@@ -61,7 +61,7 @@ type Transport struct {
 	// httptrace package.
 	NewClientTrace func(*http.Request, *trace.Span) *httptrace.ClientTrace
 
-	// TODO: Implement tag propagation for HTTP.
+	// TODO: Implement tag propagation for HTTP. id:109
 }
 
 // RoundTrip implements http.RoundTripper, delegating to Base and recording stats and traces for the request.
@@ -70,7 +70,7 @@ func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	if isHealthEndpoint(req.URL.Path) {
 		return rt.RoundTrip(req)
 	}
-	// TODO: remove excessive nesting of http.RoundTrippers here.
+	// TODO: remove excessive nesting of http.RoundTrippers here. id:143
 	format := t.Propagation
 	if format == nil {
 		format = defaultFormat

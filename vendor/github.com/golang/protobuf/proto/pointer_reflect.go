@@ -309,7 +309,7 @@ func (p pointer) getInterfacePointer() pointer {
 }
 
 func (p pointer) asPointerTo(t reflect.Type) reflect.Value {
-	// TODO: check that p.v.Type().Elem() == t?
+	// TODO: check that p.v.Type().Elem() == t? id:196
 	return p.v
 }
 

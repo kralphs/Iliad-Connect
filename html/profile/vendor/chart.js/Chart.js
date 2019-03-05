@@ -563,10 +563,10 @@ Color.prototype = {
 	},
 
 	clone: function () {
-		// NOTE(SB): using node-clone creates a dependency to Buffer when using browserify,
-		// making the final build way to big to embed in Chart.js. So let's do it manually,
-		// assuming that values to clone are 1 dimension arrays containing only numbers,
-		// except 'alpha' which is a number.
+		// NOTE (SB): using node-clone creates a dependency to Buffer when using browserify, id:47
+  // making the final build way to big to embed in Chart.js. So let's do it manually,
+  // assuming that values to clone are 1 dimension arrays containing only numbers,
+  // except 'alpha' which is a number.
 		var result = new Color();
 		var source = this.values;
 		var target = result.values;
@@ -4127,9 +4127,9 @@ module.exports = function(Chart) {
 
 				scale.mergeTicksOptions();
 
-				// TODO(SB): I think we should be able to remove this custom case (options.scale)
-				// and consider it as a regular scale part of the "scales"" map only! This would
-				// make the logic easier and remove some useless? custom code.
+				// TODO (SB): I think we should be able to remove this custom case (options.scale) id:68
+    // and consider it as a regular scale part of the "scales"" map only! This would
+    // make the logic easier and remove some useless? custom code.
 				if (item.isDefault) {
 					me.scale = scale;
 				}
@@ -7519,7 +7519,7 @@ module.exports = Element.extend({
 				var cosRotation = Math.cos(angleRadians);
 				var sinRotation = Math.sin(angleRadians);
 
-				// TODO - improve this calculation
+				// TODO - improve this calculation id:88
 				var labelHeight = (sinRotation * largestTextWidth)
 					+ (tickFont.size * tallestLabelHeightInLines)
 					+ (lineSpace * (tallestLabelHeightInLines - 1))
@@ -9660,8 +9660,8 @@ var exports = module.exports = {
 	 */
 	roundedRect: function(ctx, x, y, width, height, radius) {
 		if (radius) {
-			// NOTE(SB) `epsilon` helps to prevent minor artifacts appearing
-			// on Chrome when `r` is exactly half the height or the width.
+			// NOTE (SB) `epsilon` helps to prevent minor artifacts appearing id:122
+   // on Chrome when `r` is exactly half the height or the width.
 			var epsilon = 0.0000001;
 			var r = Math.min(radius, (height / 2) - epsilon, (width / 2) - epsilon);
 
@@ -9726,10 +9726,10 @@ var exports = module.exports = {
 			var topY = -offset;
 			var sideSize = Math.SQRT2 * radius;
 
-			// NOTE(SB) the rounded rect implementation changed to use `arcTo`
-			// instead of `quadraticCurveTo` since it generates better results
-			// when rect is almost a circle. 0.425 (instead of 0.5) produces
-			// results visually closer to the previous impl.
+			// NOTE (SB) the rounded rect implementation changed to use `arcTo` id:22
+   // instead of `quadraticCurveTo` since it generates better results
+   // when rect is almost a circle. 0.425 (instead of 0.5) produces
+   // results visually closer to the previous impl.
 			this.roundedRect(ctx, leftX, topY, sideSize, sideSize, radius * 0.425);
 			break;
 		case 'rectRot':
@@ -9984,7 +9984,7 @@ var helpers = {
 					return false;
 				}
 			} else if (v0 !== v1) {
-				// NOTE: two different object instances will never be equal: {x:20} != {x:20}
+				// NOTE: two different object instances will never be equal: { != { id:48
 				return false;
 			}
 		}
@@ -10612,8 +10612,8 @@ function readUsedSize(element, property) {
 function initCanvas(canvas, config) {
 	var style = canvas.style;
 
-	// NOTE(SB) canvas.getAttribute('width') !== canvas.width: in the first case it
-	// returns null or '' if no explicit value has been set to the canvas attribute.
+	// NOTE (SB) canvas.getAttribute('width') !== canvas.width: in the first case it id:69
+ // returns null or '' if no explicit value has been set to the canvas attribute.
 	var renderHeight = canvas.getAttribute('height');
 	var renderWidth = canvas.getAttribute('width');
 

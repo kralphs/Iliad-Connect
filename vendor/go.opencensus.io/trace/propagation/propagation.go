@@ -15,7 +15,7 @@
 // Package propagation implements the binary trace context format.
 package propagation // import "go.opencensus.io/trace/propagation"
 
-// TODO: link to external spec document.
+// TODO: link to external spec document. id:111
 
 // BinaryFormat format:
 //
@@ -105,4 +105,4 @@ type HTTPFormat interface {
 	SpanContextToRequest(sc trace.SpanContext, req *http.Request)
 }
 
-// TODO(jbd): Find a more representative but short name for HTTPFormat.
+// TODO (jbd): Find a more representative but short name for HTTPFormat. id:145

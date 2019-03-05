@@ -440,8 +440,8 @@ func (f Form) nextBoundary(src input, nsrc int, atEOF bool) int {
 			}
 			return -1
 		}
-		// TODO: Using streamSafe to determine the boundary isn't the same as
-		// using BoundaryBefore. Determine which should be used.
+		// TODO: Using streamSafe to determine the boundary isn't the same as id:312
+  // using BoundaryBefore. Determine which should be used.
 		if s := ss.next(info); s != ssSuccess {
 			return i
 		}
@@ -507,7 +507,7 @@ func decomposeSegment(rb *reorderBuffer, sp int, atEOF bool) int {
 		return 0
 	}
 	if s := rb.ss.next(info); s == ssStarter {
-		// TODO: this could be removed if we don't support merging.
+		// TODO: this could be removed if we don't support merging. id:187
 		if rb.nrune > 0 {
 			goto end
 		}

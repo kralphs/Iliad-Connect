@@ -489,8 +489,8 @@ func (p *parser) recvMsg(maxReceiveMessageSize int) (pf payloadFormat, msg []byt
 	if int(length) > maxReceiveMessageSize {
 		return 0, nil, status.Errorf(codes.ResourceExhausted, "grpc: received message larger than max (%d vs. %d)", length, maxReceiveMessageSize)
 	}
-	// TODO(bradfitz,zhaoq): garbage. reuse buffer after proto decoding instead
-	// of making it for each message:
+	// TODO (bradfitz,zhaoq): garbage. reuse buffer after proto decoding instead id:329
+ // of making it for each message:
 	msg = make([]byte, int(length))
 	if _, err := p.r.Read(msg); err != nil {
 		if err == io.EOF {
@@ -505,7 +505,7 @@ func (p *parser) recvMsg(maxReceiveMessageSize int) (pf payloadFormat, msg []byt
 // error if it is too large to be transmitted by grpc.  If msg is nil, it
 // generates an empty message.
 func encode(c baseCodec, msg interface{}) ([]byte, error) {
-	if msg == nil { // NOTE: typed nils will not be caught by this check
+	if msg == nil { // NOTE: typed nils will not be caught by this check id:393
 		return nil, nil
 	}
 	b, err := c.Marshal(msg)
@@ -521,7 +521,7 @@ func encode(c baseCodec, msg interface{}) ([]byte, error) {
 // compress returns the input bytes compressed by compressor or cp.  If both
 // compressors are nil, returns nil.
 //
-// TODO(dfawley): eliminate cp parameter by wrapping Compressor in an encoding.Compressor.
+// TODO (dfawley): eliminate cp parameter by wrapping Compressor in an encoding.Compressor. id:402
 func compress(in []byte, cp Compressor, compressor encoding.Compressor) ([]byte, error) {
 	if compressor == nil && cp == nil {
 		return nil, nil
@@ -636,8 +636,8 @@ func recvAndDecompress(p *parser, s *transport.Stream, dc Decompressor, maxRecei
 		}
 	}
 	if len(d) > maxReceiveMessageSize {
-		// TODO: Revisit the error code. Currently keep it consistent with java
-		// implementation.
+		// TODO: Revisit the error code. Currently keep it consistent with java id:385
+  // implementation.
 		return nil, status.Errorf(codes.ResourceExhausted, "grpc: received message larger than max (%d vs. %d)", len(d), maxReceiveMessageSize)
 	}
 	return d, nil
@@ -645,7 +645,7 @@ func recvAndDecompress(p *parser, s *transport.Stream, dc Decompressor, maxRecei
 
 // For the two compressor parameters, both should not be set, but if they are,
 // dc takes precedence over compressor.
-// TODO(dfawley): wrap the old compressor/decompressor using the new API?
+// TODO (dfawley): wrap the old compressor/decompressor using the new API? id:289
 func recv(p *parser, c baseCodec, s *transport.Stream, dc Decompressor, m interface{}, maxReceiveMessageSize int, payInfo *payloadInfo, compressor encoding.Compressor) error {
 	d, err := recvAndDecompress(p, s, dc, maxReceiveMessageSize, payInfo, compressor)
 	if err != nil {

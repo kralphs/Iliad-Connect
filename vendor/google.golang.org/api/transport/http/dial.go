@@ -38,7 +38,7 @@ func NewClient(ctx context.Context, opts ...option.ClientOption) (*http.Client, 
 	if err != nil {
 		return nil, "", err
 	}
-	// TODO(cbro): consider injecting the User-Agent even if an explicit HTTP client is provided?
+	// TODO (cbro): consider injecting the User-Agent even if an explicit HTTP client is provided? id:189
 	if settings.HTTPClient != nil {
 		return settings.HTTPClient, settings.Endpoint, nil
 	}
@@ -122,7 +122,7 @@ func (t userAgentTransport) RoundTrip(req *http.Request) (*http.Response, error)
 	for k, vv := range req.Header {
 		newReq.Header[k] = vv
 	}
-	// TODO(cbro): append to existing User-Agent header?
+	// TODO (cbro): append to existing User-Agent header? id:353
 	newReq.Header["User-Agent"] = []string{t.userAgent}
 	return rt.RoundTrip(&newReq)
 }

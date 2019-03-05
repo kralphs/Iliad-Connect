@@ -53,13 +53,13 @@ type SockaddrDatalink struct {
 func nametomib(name string) (mib []_C_int, err error) {
 	const siz = unsafe.Sizeof(mib[0])
 
-	// NOTE(rsc): It seems strange to set the buffer to have
-	// size CTL_MAXNAME+2 but use only CTL_MAXNAME
-	// as the size. I don't know why the +2 is here, but the
-	// kernel uses +2 for its own implementation of this function.
-	// I am scared that if we don't include the +2 here, the kernel
-	// will silently write 2 words farther than we specify
-	// and we'll get memory corruption.
+	// NOTE (rsc): It seems strange to set the buffer to have id:344
+ // size CTL_MAXNAME+2 but use only CTL_MAXNAME
+ // as the size. I don't know why the +2 is here, but the
+ // kernel uses +2 for its own implementation of this function.
+ // I am scared that if we don't include the +2 here, the kernel
+ // will silently write 2 words farther than we specify
+ // and we'll get memory corruption.
 	var buf [CTL_MAXNAME + 2]_C_int
 	n := uintptr(CTL_MAXNAME) * siz
 

@@ -322,9 +322,9 @@ func CloseBody(res *http.Response) {
 	}
 	// Justification for 3 byte reads: two for up to "\r\n" after
 	// a JSON/XML document, and then 1 to see EOF if we haven't yet.
-	// TODO(bradfitz): detect Go 1.3+ and skip these reads.
-	// See https://codereview.appspot.com/58240043
-	// and https://codereview.appspot.com/49570044
+	// TODO (bradfitz): detect Go 1.3+ and skip these reads. id:368
+ // See https://codereview.appspot.com/58240043
+ // and https://codereview.appspot.com/49570044
 	buf := make([]byte, 1)
 	for i := 0; i < 3; i++ {
 		_, err := res.Body.Read(buf)
@@ -426,4 +426,4 @@ type traceTok string
 
 func (t traceTok) Get() (string, string) { return "trace", "token:" + string(t) }
 
-// TODO: Fields too
+// TODO: Fields too id:272

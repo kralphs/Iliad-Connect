@@ -654,7 +654,7 @@ func setDefaults(v reflect.Value, recur, zeros bool) {
 			continue
 		}
 		fptr := f.Addr().Interface() // **T
-		// TODO: Consider batching the allocations we do here.
+		// TODO: Consider batching the allocations we do here. id:102
 		switch sf.kind {
 		case reflect.Bool:
 			b := new(bool)

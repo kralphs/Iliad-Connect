@@ -84,7 +84,7 @@ git ls-files "*.go" | xargs grep -l '"math/rand"' 2>&1 | (! grep -v '^examples\|
 git ls-files "*.go" | (! xargs grep "\(import \|^\s*\)\"github.com/golang/protobuf/ptypes/")
 
 # - Check imports that are illegal in appengine (until Go 1.11).
-# TODO: Remove when we drop Go 1.10 support
+# TODO: Remove when we drop Go 1.10 support id:408
 go list -f {{.Dir}} ./... | xargs go run test/go_vet/vet.go
 
 # - gofmt, goimports, golint (with exceptions for generated code), go vet.
@@ -108,7 +108,7 @@ if go help mod >& /dev/null; then
 fi
 
 # - Collection of static analysis checks
-### HACK HACK HACK: Remove once staticcheck works with modules.
+### HACK HACK HACK: Remove once staticcheck works with modules. id:412
 # Make a symlink in ${GOPATH}/src to its ${GOPATH}/pkg/mod equivalent for every package we use.
 for x in $(find "${GOPATH}/pkg/mod" -name '*@*' | grep -v \/mod\/cache\/); do
   pkg="$(echo ${x#"${GOPATH}/pkg/mod/"} | cut -f1 -d@)";
@@ -119,7 +119,7 @@ for x in $(find "${GOPATH}/pkg/mod" -name '*@*' | grep -v \/mod\/cache\/); do
 done
 ### END HACK HACK HACK
 
-# TODO(menghanl): fix errors in transport_test.
+# TODO (menghanl): fix errors in transport_test. id:295
 staticcheck -ignore '
 balancer.go:SA1019
 balancer_test.go:SA1019

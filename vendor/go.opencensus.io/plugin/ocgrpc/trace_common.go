@@ -83,14 +83,14 @@ func (s *ServerHandler) traceTagRPC(ctx context.Context, rti *stats.RPCTagInfo) 
 
 func traceHandleRPC(ctx context.Context, rs stats.RPCStats) {
 	span := trace.FromContext(ctx)
-	// TODO: compressed and uncompressed sizes are not populated in every message.
+	// TODO: compressed and uncompressed sizes are not populated in every message. id:211
 	switch rs := rs.(type) {
 	case *stats.Begin:
 		span.AddAttributes(
 			trace.BoolAttribute("Client", rs.Client),
 			trace.BoolAttribute("FailFast", rs.FailFast))
 	case *stats.InPayload:
-		span.AddMessageReceiveEvent(0 /* TODO: messageID */, int64(rs.Length), int64(rs.WireLength))
+		span.AddMessageReceiveEvent(0 /* TODO: messageID case *stats.OutPayload: span.AddMessageSendEvent(0, int64(rs.Length), int64(rs.WireLength)) case *stats.End: if rs.Error != nil { s, ok := status.FromError(rs.Error) if ok { span.SetStatus(trace.Status{Code: int32(s.Code()), Message: s.Message()}) } else { span.SetStatus(trace.Status{Code: int32(codes.Internal), Message: rs.Error.Error()}) } } span.End() } } id:204 	case *stats.OutPayload: 		span.AddMessageSendEvent(0, int64(rs.Length), int64(rs.WireLength)) 	case *stats.End: 		if rs.Error != nil { 			s, ok := status.FromError(rs.Error) 			if ok { 				span.SetStatus(trace.Status{Code: int32(s.Code()), Message: s.Message()}) 			} else { 				span.SetStatus(trace.Status{Code: int32(codes.Internal), Message: rs.Error.Error()}) 			} 		} 		span.End() 	} } */, int64(rs.Length), int64(rs.WireLength))
 	case *stats.OutPayload:
 		span.AddMessageSendEvent(0, int64(rs.Length), int64(rs.WireLength))
 	case *stats.End:

@@ -224,11 +224,11 @@ func sanitizeHeaders(hdrs []string) []string {
 		// There should be no spaces around the colon separating the
 		// header name from the header value or around the values
 		// themselves. The values should be separated by commas.
-		// NOTE: The semantics for headers without a value are not clear.
-		//       However from specifications these should be edge-cases
-		//       anyway and we should assume that there will be no
-		//       canonical headers using empty values. Any such headers
-		//       are discarded at the regexp stage above.
+		// NOTE: The semantics for headers without a value are not clear. id:100
+  //       However from specifications these should be edge-cases
+  //       anyway and we should assume that there will be no
+  //       canonical headers using empty values. Any such headers
+  //       are discarded at the regexp stage above.
 		sanitizedHeaders = append(
 			sanitizedHeaders,
 			fmt.Sprintf("%s:%s", header, strings.Join(values, ",")),
@@ -1096,8 +1096,8 @@ func setEncryptionHeaders(headers http.Header, key []byte, copySource bool) erro
 	if key == nil {
 		return nil
 	}
-	// TODO(jbd): Ask the API team to return a more user-friendly error
-	// and avoid doing this check at the client level.
+	// TODO (jbd): Ask the API team to return a more user-friendly error id:134
+ // and avoid doing this check at the client level.
 	if len(key) != 32 {
 		return errors.New("storage: not a 32-byte AES-256 key")
 	}

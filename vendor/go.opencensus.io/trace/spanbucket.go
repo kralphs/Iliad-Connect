@@ -22,7 +22,7 @@ import (
 const samplePeriod = time.Second
 
 // defaultLatencies contains the default latency bucket bounds.
-// TODO: consider defaults, make configurable
+// TODO: consider defaults, make configurable id:161
 var defaultLatencies = [...]time.Duration{
 	10 * time.Microsecond,
 	100 * time.Microsecond,

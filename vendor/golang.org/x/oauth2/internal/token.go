@@ -233,9 +233,9 @@ func RetrieveToken(ctx context.Context, clientID, clientSecret, tokenURL string,
 		}
 		e := vals.Get("expires_in")
 		if e == "" {
-			// TODO(jbd): Facebook's OAuth2 implementation is broken and
-			// returns expires_in field in expires. Remove the fallback to expires,
-			// when Facebook fixes their implementation.
+			// TODO (jbd): Facebook's OAuth2 implementation is broken and id:303
+   // returns expires_in field in expires. Remove the fallback to expires,
+   // when Facebook fixes their implementation.
 			e = vals.Get("expires")
 		}
 		expires, _ := strconv.Atoi(e)

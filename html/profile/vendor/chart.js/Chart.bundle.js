@@ -561,10 +561,10 @@ Color.prototype = {
 	},
 
 	clone: function () {
-		// NOTE(SB): using node-clone creates a dependency to Buffer when using browserify,
-		// making the final build way to big to embed in Chart.js. So let's do it manually,
-		// assuming that values to clone are 1 dimension arrays containing only numbers,
-		// except 'alpha' which is a number.
+		// NOTE (SB): using node-clone creates a dependency to Buffer when using browserify, id:84
+  // making the final build way to big to embed in Chart.js. So let's do it manually,
+  // assuming that values to clone are 1 dimension arrays containing only numbers,
+  // except 'alpha' which is a number.
 		var result = new Color();
 		var source = this.values;
 		var target = result.values;
@@ -2023,7 +2023,7 @@ module.exports = {
         this._config = config;
         // Lenient ordinal parsing accepts just a number in addition to
         // number + (possibly) stuff coming from _dayOfMonthOrdinalParse.
-        // TODO: Remove "ordinalParse" fallback in next major release.
+        // TODO: Remove "ordinalParse" fallback in next major release. id:12
         this._dayOfMonthOrdinalParseLenient = new RegExp(
             (this._dayOfMonthOrdinalParse.source || this._ordinalParse.source) +
                 '|' + (/\d{1,2}/).source);
@@ -2666,7 +2666,7 @@ module.exports = {
             this._shortMonthsParse = [];
         }
 
-        // TODO: add sorting
+        // TODO: add sorting id:18
         // Sorting makes sure if one month (or abbr) is a prefix of another
         // see sorting in computeMonthsParse
         for (i = 0; i < 12; i++) {
@@ -2706,7 +2706,7 @@ module.exports = {
                 value = toInt(value);
             } else {
                 value = mom.localeData().monthsParse(value);
-                // TODO: Another silent failure?
+                // TODO: Another silent failure? id:44
                 if (!isNumber(value)) {
                     return mom;
                 }
@@ -3494,7 +3494,7 @@ module.exports = {
 
     function loadLocale(name) {
         var oldLocale = null;
-        // TODO: Find a better way to register and load all the locales in Node
+        // TODO: Find a better way to register and load all the locales in Node id:65
         if (!locales[name] && (typeof module !== 'undefined') &&
                 module && module.exports) {
             try {
@@ -3774,7 +3774,7 @@ module.exports = {
             dow = 1;
             doy = 4;
 
-            // TODO: We need to take the current isoWeekYear, but that depends on
+            // TODO: We need to take the current isoWeekYear, but that depends on id:85
             // how we interpret now (local, utc, fixed offset). So create
             // a now version of current config (take local/utc/offset flags, and
             // create now).
@@ -3949,7 +3949,7 @@ module.exports = {
 
     function checkWeekday(weekdayStr, parsedInput, config) {
         if (weekdayStr) {
-            // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check.
+            // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check. id:119
             var weekdayProvided = defaultLocaleWeekdaysShort.indexOf(weekdayStr),
                 weekdayActual = new Date(parsedInput[0], parsedInput[1], parsedInput[2]).getDay();
             if (weekdayProvided !== weekdayActual) {
@@ -4053,7 +4053,7 @@ module.exports = {
 
     // date from string and format string
     function configFromStringAndFormat(config) {
-        // TODO: Move this to another part of the creation flow to prevent circular deps
+        // TODO: Move this to another part of the creation flow to prevent circular deps id:19
         if (config._f === hooks.ISO_8601) {
             configFromISO(config);
             return;
@@ -4348,7 +4348,7 @@ module.exports = {
         return res;
     }
 
-    // TODO: Use [].sort instead?
+    // TODO: Use [].sort instead? id:45
     function min () {
         var args = [].slice.call(arguments, 0);
 
@@ -4779,7 +4779,7 @@ module.exports = {
         return res;
     }
 
-    // TODO: remove 'name' arg after deprecation is removed
+    // TODO: remove 'name' arg after deprecation is removed id:66
     function createAdder(direction, name) {
         return function (val, period) {
             var dur, tmp;
@@ -5334,7 +5334,7 @@ module.exports = {
     addRegexToken('D',  match1to2);
     addRegexToken('DD', match1to2, match2);
     addRegexToken('Do', function (isStrict, locale) {
-        // TODO: Remove "ordinalParse" fallback in next major release.
+        // TODO: Remove "ordinalParse" fallback in next major release. id:86
         return isStrict ?
           (locale._dayOfMonthOrdinalParse || locale._ordinalParse) :
           locale._dayOfMonthOrdinalParseLenient;
@@ -5862,7 +5862,7 @@ module.exports = {
         }
     }
 
-    // TODO: Use this.as('ms')?
+    // TODO: Use this.as('ms')? id:120
     function valueOf$1 () {
         if (!this.isValid()) {
             return NaN;
@@ -8633,9 +8633,9 @@ module.exports = function(Chart) {
 
 				scale.mergeTicksOptions();
 
-				// TODO(SB): I think we should be able to remove this custom case (options.scale)
-				// and consider it as a regular scale part of the "scales"" map only! This would
-				// make the logic easier and remove some useless? custom code.
+				// TODO (SB): I think we should be able to remove this custom case (options.scale) id:20
+    // and consider it as a regular scale part of the "scales"" map only! This would
+    // make the logic easier and remove some useless? custom code.
 				if (item.isDefault) {
 					me.scale = scale;
 				}
@@ -12025,7 +12025,7 @@ module.exports = Element.extend({
 				var cosRotation = Math.cos(angleRadians);
 				var sinRotation = Math.sin(angleRadians);
 
-				// TODO - improve this calculation
+				// TODO - improve this calculation id:46
 				var labelHeight = (sinRotation * largestTextWidth)
 					+ (tickFont.size * tallestLabelHeightInLines)
 					+ (lineSpace * (tallestLabelHeightInLines - 1))
@@ -14166,8 +14166,8 @@ var exports = module.exports = {
 	 */
 	roundedRect: function(ctx, x, y, width, height, radius) {
 		if (radius) {
-			// NOTE(SB) `epsilon` helps to prevent minor artifacts appearing
-			// on Chrome when `r` is exactly half the height or the width.
+			// NOTE (SB) `epsilon` helps to prevent minor artifacts appearing id:67
+   // on Chrome when `r` is exactly half the height or the width.
 			var epsilon = 0.0000001;
 			var r = Math.min(radius, (height / 2) - epsilon, (width / 2) - epsilon);
 
@@ -14232,10 +14232,10 @@ var exports = module.exports = {
 			var topY = -offset;
 			var sideSize = Math.SQRT2 * radius;
 
-			// NOTE(SB) the rounded rect implementation changed to use `arcTo`
-			// instead of `quadraticCurveTo` since it generates better results
-			// when rect is almost a circle. 0.425 (instead of 0.5) produces
-			// results visually closer to the previous impl.
+			// NOTE (SB) the rounded rect implementation changed to use `arcTo` id:87
+   // instead of `quadraticCurveTo` since it generates better results
+   // when rect is almost a circle. 0.425 (instead of 0.5) produces
+   // results visually closer to the previous impl.
 			this.roundedRect(ctx, leftX, topY, sideSize, sideSize, radius * 0.425);
 			break;
 		case 'rectRot':
@@ -14490,7 +14490,7 @@ var helpers = {
 					return false;
 				}
 			} else if (v0 !== v1) {
-				// NOTE: two different object instances will never be equal: {x:20} != {x:20}
+				// NOTE: two different object instances will never be equal: { != { id:121
 				return false;
 			}
 		}
@@ -15118,8 +15118,8 @@ function readUsedSize(element, property) {
 function initCanvas(canvas, config) {
 	var style = canvas.style;
 
-	// NOTE(SB) canvas.getAttribute('width') !== canvas.width: in the first case it
-	// returns null or '' if no explicit value has been set to the canvas attribute.
+	// NOTE (SB) canvas.getAttribute('width') !== canvas.width: in the first case it id:21
+ // returns null or '' if no explicit value has been set to the canvas attribute.
 	var renderHeight = canvas.getAttribute('height');
 	var renderWidth = canvas.getAttribute('width');
 

@@ -125,8 +125,8 @@ func record(tags *tag.Map, ms interface{}, attachments map[string]string) {
 // duration is. For example, the Stackdriver exporter recommends a value no
 // lower than 1 minute. Consult each exporter per your needs.
 func SetReportingPeriod(d time.Duration) {
-	// TODO(acetechnologist): ensure that the duration d is more than a certain
-	// value. e.g. 1s
+	// TODO (acetechnologist): ensure that the duration d is more than a certain id:206
+ // value. e.g. 1s
 	req := &setReportingPeriodReq{
 		d: d,
 		c: make(chan bool),
