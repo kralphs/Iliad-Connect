@@ -24,7 +24,7 @@ import (
 	"go.opencensus.io/trace/propagation"
 )
 
-// TODO(jbd): Add godoc examples.
+// TODO (jbd): Add godoc examples. id:110
 
 var defaultFormat propagation.HTTPFormat = &b3.HTTPFormat{}
 
@@ -46,15 +46,15 @@ type traceTransport struct {
 	newClientTrace func(*http.Request, *trace.Span) *httptrace.ClientTrace
 }
 
-// TODO(jbd): Add message events for request and response size.
+// TODO (jbd): Add message events for request and response size. id:144
 
 // RoundTrip creates a trace.Span and inserts it into the outgoing request's headers.
 // The created span can follow a parent span, if a parent is presented in
 // the request's context.
 func (t *traceTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	name := t.formatSpanName(req)
-	// TODO(jbd): Discuss whether we want to prefix
-	// outgoing requests with Sent.
+	// TODO (jbd): Discuss whether we want to prefix id:160
+ // outgoing requests with Sent.
 	ctx, span := trace.StartSpan(req.Context(), name,
 		trace.WithSampler(t.startOptions.Sampler),
 		trace.WithSpanKind(trace.SpanKindClient))

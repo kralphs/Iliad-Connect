@@ -352,9 +352,9 @@ func (u *unmarshalInfo) computeUnmarshalInfo() {
 			bit := len(u.reqFields)
 			u.reqFields = append(u.reqFields, name)
 			reqMask = uint64(1) << uint(bit)
-			// TODO: if we have more than 64 required fields, we end up
-			// not verifying that all required fields are present.
-			// Fix this, perhaps using a count of required fields?
+			// TODO: if we have more than 64 required fields, we end up id:208
+   // not verifying that all required fields are present.
+   // Fix this, perhaps using a count of required fields?
 		}
 
 		// Store the info in the correct slot in the message.
@@ -362,7 +362,7 @@ func (u *unmarshalInfo) computeUnmarshalInfo() {
 	}
 
 	// Find any types associated with oneof fields.
-	// TODO: XXX_OneofFuncs returns more info than we need.  Get rid of some of it?
+	// TODO: XXX_OneofFuncs returns more info than we need. Get rid of some of it? id:201
 	fn := reflect.Zero(reflect.PtrTo(t)).MethodByName("XXX_OneofFuncs")
 	if fn.IsValid() {
 		res := fn.Call(nil)[3] // last return value from XXX_OneofFuncs: []interface{}
@@ -431,7 +431,7 @@ func (u *unmarshalInfo) computeUnmarshalInfo() {
 func (u *unmarshalInfo) setTag(tag int, field field, unmarshal unmarshaler, reqMask uint64, name string) {
 	i := unmarshalFieldInfo{field: field, unmarshal: unmarshal, reqMask: reqMask, name: name}
 	n := u.typ.NumField()
-	if tag >= 0 && (tag < 16 || tag < 2*n) { // TODO: what are the right numbers here?
+	if tag >= 0 && (tag < 16 || tag < 2*n) { // TODO: what are the right numbers here? id:106
 		for len(u.dense) <= tag {
 			u.dense = append(u.dense, unmarshalFieldInfo{})
 		}
@@ -1291,7 +1291,7 @@ func unmarshalBoolValue(b []byte, f pointer, w int) ([]byte, error) {
 	if n == 0 {
 		return nil, io.ErrUnexpectedEOF
 	}
-	// TODO: check if x>1? Tests seem to indicate no.
+	// TODO: check if x>1? Tests seem to indicate no. id:140
 	v := x != 0
 	*f.toBool() = v
 	return b[n:], nil

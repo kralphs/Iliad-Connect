@@ -166,7 +166,7 @@ func (u *marshalInfo) size(ptr pointer) int {
 	}
 
 	// If the message can marshal itself, let it do it, for compatibility.
-	// NOTE: This is not efficient.
+	// NOTE: This is not efficient. id:137
 	if u.hasmarshaler {
 		m := ptr.asPointerTo(u.typ).Interface().(Marshaler)
 		b, _ := m.Marshal()
@@ -223,7 +223,7 @@ func (u *marshalInfo) marshal(b []byte, ptr pointer, deterministic bool) ([]byte
 	}
 
 	// If the message can marshal itself, let it do it, for compatibility.
-	// NOTE: This is not efficient.
+	// NOTE: This is not efficient. id:37
 	if u.hasmarshaler {
 		m := ptr.asPointerTo(u.typ).Interface().(Marshaler)
 		b1, err := m.Marshal()
@@ -311,7 +311,7 @@ func (u *marshalInfo) computeMarshalInfo() {
 	u.sizecache = invalidField
 
 	// If the message can marshal itself, let it do it, for compatibility.
-	// NOTE: This is not efficient.
+	// NOTE: This is not efficient. id:197
 	if reflect.PtrTo(t).Implements(marshalerType) {
 		u.hasmarshaler = true
 		atomic.StoreInt32(&u.initialized, 1)
@@ -326,7 +326,7 @@ func (u *marshalInfo) computeMarshalInfo() {
 
 	n := t.NumField()
 
-	// deal with XXX fields first
+	// deal with XXX fields first id:199
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
 		if !strings.HasPrefix(f.Name, "XXX_") {
@@ -1303,8 +1303,8 @@ func appendFixed64(b []byte, v uint64) []byte {
 
 // appendVarint appends an encoded varint to b.
 func appendVarint(b []byte, v uint64) []byte {
-	// TODO: make 1-byte (maybe 2-byte) case inline-able, once we
-	// have non-leaf inliner.
+	// TODO: make 1-byte (maybe 2-byte) case inline-able, once we id:104
+ // have non-leaf inliner.
 	switch {
 	case v < 1<<7:
 		b = append(b, byte(v))
@@ -2684,7 +2684,7 @@ func Size(pb Message) int {
 	}
 	if m, ok := pb.(Marshaler); ok {
 		// If the message can marshal itself, let it do it, for compatibility.
-		// NOTE: This is not efficient.
+		// NOTE: This is not efficient. id:138
 		b, _ := m.Marshal()
 		return len(b)
 	}
@@ -2707,7 +2707,7 @@ func Marshal(pb Message) ([]byte, error) {
 	}
 	if m, ok := pb.(Marshaler); ok {
 		// If the message can marshal itself, let it do it, for compatibility.
-		// NOTE: This is not efficient.
+		// NOTE: This is not efficient. id:38
 		return m.Marshal()
 	}
 	// in case somehow we didn't generate the wrapper
@@ -2735,7 +2735,7 @@ func (p *Buffer) Marshal(pb Message) error {
 	}
 	if m, ok := pb.(Marshaler); ok {
 		// If the message can marshal itself, let it do it, for compatibility.
-		// NOTE: This is not efficient.
+		// NOTE: This is not efficient. id:207
 		b, err := m.Marshal()
 		p.buf = append(p.buf, b...)
 		return err

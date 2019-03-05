@@ -12,8 +12,8 @@ import "runtime"
 //
 // To change fd's window size, the req argument should be TIOCSWINSZ.
 func IoctlSetWinsize(fd int, req uint, value *Winsize) error {
-	// TODO: if we get the chance, remove the req parameter and
-	// hardcode TIOCSWINSZ.
+	// TODO: if we get the chance, remove the req parameter and id:234
+ // hardcode TIOCSWINSZ.
 	err := ioctlSetWinsize(fd, req, value)
 	runtime.KeepAlive(value)
 	return err
@@ -23,7 +23,7 @@ func IoctlSetWinsize(fd int, req uint, value *Winsize) error {
 //
 // The req value will usually be TCSETA or TIOCSETA.
 func IoctlSetTermios(fd int, req uint, value *Termios) error {
-	// TODO: if we get the chance, remove the req parameter.
+	// TODO: if we get the chance, remove the req parameter. id:263
 	err := ioctlSetTermios(fd, req, value)
 	runtime.KeepAlive(value)
 	return err

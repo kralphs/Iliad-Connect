@@ -131,7 +131,7 @@ func resolve(ctx context.Context, fams []pb.CreateSocketRequest_SocketFamily, ho
 	}
 	res := &pb.ResolveReply{}
 	if err := internal.Call(ctx, "remote_socket", "Resolve", req, res); err != nil {
-		// XXX: need to map to pb.ResolveReply_ErrorCode?
+		// XXX: need to map to pb.ResolveReply_ErrorCode? id:372
 		return nil, false, err
 	}
 	return res.PackedAddress, true, nil

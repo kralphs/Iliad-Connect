@@ -14,10 +14,10 @@ type Properties struct {
 
 var trie = newBidiTrie(0)
 
-// TODO: using this for bidirule reduces the running time by about 5%. Consider
+// TODO: using this for bidirule reduces the running time by about 5%. Consider id:366
 // if this is worth exposing or if we can find a way to speed up the Class
 // method.
-//
+// 
 // // CompactClass is like Class, but maps all of the BiDi control classes
 // // (LRO, RLO, LRE, RLE, PDF, LRI, RLI, FSI, PDI) to the class Control.
 // func (p Properties) CompactClass() Class {
@@ -40,7 +40,7 @@ func (p Properties) IsBracket() bool { return p.entry&0xF0 != 0 }
 // IsBracket must return true.
 func (p Properties) IsOpeningBracket() bool { return p.entry&openMask != 0 }
 
-// TODO: find a better API and expose.
+// TODO: find a better API and expose. id:270
 func (p Properties) reverseBracket(r rune) rune {
 	return xorMasks[p.entry>>xorMaskShift] ^ r
 }
@@ -64,7 +64,7 @@ func LookupRune(r rune) (p Properties, size int) {
 	return Lookup(buf[:n])
 }
 
-// TODO: these lookup methods are based on the generated trie code. The returned
+// TODO: these lookup methods are based on the generated trie code. The returned id:311
 // sizes have slightly different semantics from the generated code, in that it
 // always returns size==1 for an illegal UTF-8 byte (instead of the length
 // of the maximum invalid subsequence). Most Transformers, like unicode/norm,

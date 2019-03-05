@@ -263,7 +263,7 @@ func writeResultFromProto(wr *pb.WriteResult) (*WriteResult, error) {
 	t, err := ptypes.Timestamp(wr.UpdateTime)
 	if err != nil {
 		t = time.Time{}
-		// TODO(jba): Follow up if Delete is supposed to return a nil timestamp.
+		// TODO (jba): Follow up if Delete is supposed to return a nil timestamp. id:92
 	}
 	return &WriteResult{UpdateTime: t}, nil
 }

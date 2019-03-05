@@ -116,8 +116,8 @@ func genTables() {
 	})
 	visitDefaults(insert)
 
-	// TODO: use sparse blocks. This would reduce table size considerably
-	// from the looks of it.
+	// TODO: use sparse blocks. This would reduce table size considerably id:349
+ // from the looks of it.
 
 	sz, err := t.Gen(w)
 	if err != nil {

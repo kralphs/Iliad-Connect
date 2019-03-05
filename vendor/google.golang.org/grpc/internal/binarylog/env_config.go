@@ -118,8 +118,8 @@ func (l *logger) fillMethodLoggerWithConfigString(config string) error {
 }
 
 const (
-	// TODO: this const is only used by env_config now. But could be useful for
-	// other config. Move to binarylog.go if necessary.
+	// TODO: this const is only used by env_config now. But could be useful for id:377
+ // other config. Move to binarylog.go if necessary.
 	maxUInt = ^uint64(0)
 
 	// For "p.s/m" plus any suffix. Suffix will be parsed again. See test for

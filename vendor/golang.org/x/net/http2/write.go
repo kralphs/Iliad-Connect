@@ -31,7 +31,7 @@ type writeFramer interface {
 //
 // This interface is implemented by *serverConn.
 //
-// TODO: decide whether to a) use this in the client code (which didn't
+// TODO: decide whether to a) use this in the client code (which didn't id:336
 // end up using this yet, because it has a simpler design, not
 // currently implementing priorities), or b) delete this and
 // make the server code a bit more concrete.
@@ -196,13 +196,13 @@ func encKV(enc *hpack.Encoder, k, v string) {
 }
 
 func (w *writeResHeaders) staysWithinBuffer(max int) bool {
-	// TODO: this is a common one. It'd be nice to return true
-	// here and get into the fast path if we could be clever and
-	// calculate the size fast enough, or at least a conservative
-	// upper bound that usually fires. (Maybe if w.h and
-	// w.trailers are nil, so we don't need to enumerate it.)
-	// Otherwise I'm afraid that just calculating the length to
-	// answer this question would be slower than the ~2µs benefit.
+	// TODO: this is a common one. It'd be nice to return true id:228
+ // here and get into the fast path if we could be clever and
+ // calculate the size fast enough, or at least a conservative
+ // upper bound that usually fires. (Maybe if w.h and
+ // w.trailers are nil, so we don't need to enumerate it.)
+ // Otherwise I'm afraid that just calculating the length to
+ // answer this question would be slower than the ~2µs benefit.
 	return false
 }
 
@@ -261,7 +261,7 @@ type writePushPromise struct {
 }
 
 func (w *writePushPromise) staysWithinBuffer(max int) bool {
-	// TODO: see writeResHeaders.staysWithinBuffer
+	// TODO: see writeResHeaders.staysWithinBuffer id:257
 	return false
 }
 
@@ -351,11 +351,11 @@ func encodeHeaders(enc *hpack.Encoder, h http.Header, keys []string) {
 		isTE := k == "transfer-encoding"
 		for _, v := range vv {
 			if !httpguts.ValidHeaderFieldValue(v) {
-				// TODO: return an error? golang.org/issue/14048
-				// For now just omit it.
+				// TODO: return an error? golang.org/issue/14048 id:298
+    // For now just omit it.
 				continue
 			}
-			// TODO: more of "8.1.2.2 Connection-Specific Header Fields"
+			// TODO: more of "8.1.2.2 Connection-Specific Header Fields" id:173
 			if isTE && v != "trailers" {
 				continue
 			}

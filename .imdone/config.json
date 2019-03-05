@@ -1,0 +1,69 @@
+{
+  "noHelp": true,
+  "sync": {
+    "useImdoneioForPriority": true,
+    "name": "kralphs/Iliad-Connect",
+    "id": "5c7eb73701706c3424b4f337"
+  },
+  "marked": {
+    "langPrefix": "language-",
+    "smartLists": true,
+    "pedantic": false,
+    "breaks": false,
+    "tables": true,
+    "gfm": true
+  },
+  "lists": [
+    {
+      "name": "HELP",
+      "hidden": false
+    },
+    {
+      "name": "DONE",
+      "hidden": false
+    },
+    {
+      "name": "TODO",
+      "hidden": false
+    },
+    {
+      "name": "NOTE",
+      "hidden": false
+    },
+    {
+      "name": "XXX",
+      "hidden": false
+    },
+    {
+      "name": "FIXME",
+      "hidden": false
+    },
+    {
+      "name": "HACK",
+      "hidden": false
+    }
+  ],
+  "code": {
+    "include_lists": [
+      "TODO",
+      "DOING",
+      "DONE",
+      "PLANNING",
+      "FIXME",
+      "ARCHIVE",
+      "HACK",
+      "CHANGED",
+      "XXX",
+      "IDEA",
+      "NOTE",
+      "REVIEW",
+      "MARK",
+      "HELP"
+    ]
+  },
+  "keepEmptyPriority": true,
+  "watcher": true,
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs|flow-typed|imdone-export.json)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  ]
+}

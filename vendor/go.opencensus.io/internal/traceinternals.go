@@ -19,7 +19,7 @@ import (
 )
 
 // Trace allows internal access to some trace functionality.
-// TODO(#412): remove this
+// TODO (#412): remove this id:203
 var Trace interface{}
 
 var LocalSpanStoreEnabled bool

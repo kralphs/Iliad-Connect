@@ -119,8 +119,8 @@ func init() {
 			"involve a vendored copy of golang.org/x/net/trace.")
 	}
 
-	// TODO(jbd): Serve Traces from /debug/traces in the future?
-	// There is no requirement for a request to be present to have traces.
+	// TODO (jbd): Serve Traces from /debug/traces in the future? id:177
+ // There is no requirement for a request to be present to have traces.
 	http.HandleFunc("/debug/requests", Traces)
 	http.HandleFunc("/debug/events", Events)
 }
@@ -620,7 +620,7 @@ func (b *traceBucket) Add(tr *trace) {
 // If tracedOnly is true, only the traces with trace information will be returned.
 // The logs will be ref'd before returning; the caller should call
 // the Free method when it is done with them.
-// TODO(dsymonds): keep track of traced requests in separate buckets.
+// TODO (dsymonds): keep track of traced requests in separate buckets. id:341
 func (b *traceBucket) Copy(tracedOnly bool) traceList {
 	b.mu.RLock()
 	defer b.mu.RUnlock()
@@ -900,7 +900,7 @@ func (tr *trace) Events() []event {
 	return tr.events
 }
 
-var traceFreeList = make(chan *trace, 1000) // TODO(dsymonds): Use sync.Pool?
+var traceFreeList = make(chan *trace, 1000) // TODO (dsymonds): Use sync.Pool? id:233
 
 // newTrace returns a trace ready to use.
 func newTrace() *trace {
@@ -1098,7 +1098,7 @@ const pageHTML = `
 		<td class="when">{{$tr.When}}</td>
 		<td class="elapsed">{{$tr.ElapsedTime}}</td>
 		<td>{{$tr.Title}}</td>
-		{{/* TODO: include traceID/spanID */}}
+		{{/* TODO: include traceID/spanID </tr> {{if $.Expanded}} {{range $tr.Events}} <tr> <td class="when">{{.WhenString}}</td> <td class="elapsed">{{elapsed .Elapsed}}</td> <td>{{if or $.ShowSensitive (not .Sensitive)}}... {{.What}}{{else}}<em>[redacted]</em>{{end}}</td> </tr> {{end}} {{end}} {{end}} </table> id:262 	</tr> 	{{if $.Expanded}} 	{{range $tr.Events}} 	<tr> 		<td class="when">{{.WhenString}}</td> 		<td class="elapsed">{{elapsed .Elapsed}}</td> 		<td>{{if or $.ShowSensitive (not .Sensitive)}}... {{.What}}{{else}}<em>[redacted]</em>{{end}}</td> 	</tr> 	{{end}} 	{{end}} 	{{end}} </table> */}}
 	</tr>
 	{{if $.Expanded}}
 	{{range $tr.Events}}

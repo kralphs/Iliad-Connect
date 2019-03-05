@@ -55,7 +55,7 @@ func NewServerHandlerTransport(w http.ResponseWriter, r *http.Request, stats sta
 		return nil, errors.New("invalid gRPC request method")
 	}
 	contentType := r.Header.Get("Content-Type")
-	// TODO: do we assume contentType is lowercase? we did before
+	// TODO: do we assume contentType is lowercase? we did before id:282
 	contentSubtype, validContentType := contentSubtype(contentType)
 	if !validContentType {
 		return nil, errors.New("invalid gRPC request content-type")
@@ -137,7 +137,7 @@ type serverHandlerTransport struct {
 	// we just mirror the request content-type
 	contentType string
 	// we store both contentType and contentSubtype so we don't keep recreating them
-	// TODO make sure this is consistent across handler_server and http2_server
+	// TODO make sure this is consistent across handler_server and http2_server id:323
 	contentSubtype string
 
 	stats stats.Handler
@@ -211,7 +211,7 @@ func (ht *serverHandlerTransport) WriteStatus(s *Stream, st *status.Status) erro
 		if p := st.Proto(); p != nil && len(p.Details) > 0 {
 			stBytes, err := proto.Marshal(p)
 			if err != nil {
-				// TODO: return error instead, when callers are able to handle it.
+				// TODO: return error instead, when callers are able to handle it. id:244
 				panic(err)
 			}
 
@@ -252,7 +252,7 @@ func (ht *serverHandlerTransport) writeCommonHeaders(s *Stream) {
 	ht.didCommonHeaders = true
 
 	h := ht.rw.Header()
-	h["Date"] = nil // suppress Date to make tests happy; TODO: restore
+	h["Date"] = nil // suppress Date to make tests happy; TODO: restore id:362
 	h.Set("Content-Type", ht.contentType)
 
 	// Predeclare trailers we'll set later in WriteStatus (after the body).
@@ -372,7 +372,7 @@ func (ht *serverHandlerTransport) HandleStreams(startStream func(*Stream), trace
 	go func() {
 		defer close(readerDone)
 
-		// TODO: minimize garbage, optimize recvBuffer code/ownership
+		// TODO: minimize garbage, optimize recvBuffer code/ownership id:379
 		const readSize = 8196
 		for buf := make([]byte, readSize); ; {
 			n, err := req.Body.Read(buf)

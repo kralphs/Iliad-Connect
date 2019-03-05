@@ -75,7 +75,7 @@ func (e *APIError) IsTimeout() bool {
 type CallError struct {
 	Detail string
 	Code   int32
-	// TODO: Remove this if we get a distinguishable error code.
+	// TODO: Remove this if we get a distinguishable error code. id:371
 	Timeout bool
 }
 

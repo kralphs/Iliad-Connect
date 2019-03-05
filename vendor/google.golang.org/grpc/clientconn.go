@@ -436,8 +436,8 @@ func (cc *ClientConn) scWatcher() {
 				return
 			}
 			cc.mu.Lock()
-			// TODO: load balance policy runtime change is ignored.
-			// We may revist this decision in the future.
+			// TODO: load balance policy runtime change is ignored. id:357
+   // We may revist this decision in the future.
 			cc.sc = sc
 			cc.scRaw = ""
 			cc.mu.Unlock()
@@ -543,15 +543,15 @@ func (cc *ClientConn) switchBalancer(name string) {
 		grpclog.Infoln("ignoring balancer switching: Balancer DialOption used instead")
 		return
 	}
-	// TODO(bar switching) change this to two steps: drain and close.
-	// Keep track of sc in wrapper.
+	// TODO (bar switching) change this to two steps: drain and close. id:374
+ // Keep track of sc in wrapper.
 	if cc.balancerWrapper != nil {
 		cc.balancerWrapper.close()
 	}
 
 	builder := balancer.Get(name)
-	// TODO(yuxuanli): If user send a service config that does not contain a valid balancer name, should
-	// we reuse previous one?
+	// TODO (yuxuanli): If user send a service config that does not contain a valid balancer name, should id:278
+ // we reuse previous one?
 	if channelz.IsOn() {
 		if builder == nil {
 			channelz.AddTraceEvent(cc.channelzID, &channelz.TraceEventDesc{
@@ -581,8 +581,8 @@ func (cc *ClientConn) handleSubConnStateChange(sc balancer.SubConn, s connectivi
 		cc.mu.Unlock()
 		return
 	}
-	// TODO(bar switching) send updates to all balancer wrappers when balancer
-	// gracefully switching is supported.
+	// TODO (bar switching) send updates to all balancer wrappers when balancer id:319
+ // gracefully switching is supported.
 	cc.balancerWrapper.handleSubConnStateChange(sc, s)
 	cc.mu.Unlock()
 }
@@ -668,7 +668,7 @@ func (cc *ClientConn) incrCallsFailed() {
 
 // connect starts creating a transport.
 // It does nothing if the ac is not IDLE.
-// TODO(bar) Move this to the addrConn section.
+// TODO (bar) Move this to the addrConn section. id:194
 func (ac *addrConn) connect() error {
 	ac.mu.Lock()
 	if ac.state == connectivity.Shutdown {
@@ -727,7 +727,7 @@ func (ac *addrConn) tryUpdateAddrs(addrs []resolver.Address) bool {
 // the service, we return it.
 // Otherwise, we return an empty MethodConfig.
 func (cc *ClientConn) GetMethodConfig(method string) MethodConfig {
-	// TODO: Avoid the locking here.
+	// TODO: Avoid the locking here. id:358
 	cc.mu.RLock()
 	defer cc.mu.RUnlock()
 	m, ok := cc.sc.Methods[method]
@@ -997,7 +997,7 @@ func (ac *addrConn) resetTransport(resolveNow bool) {
 		// Otherwise, we'll consider this is a transient failure when:
 		//   We've exhausted all addresses
 		//   We're in CONNECTING
-		//   And it's not the very first addr to try TODO(deklerk) find a better way to do this than checking ac.successfulHandshake
+		//   And it's not the very first addr to try TODO (deklerk) find a better way to do this than checking ac.successfulHandshake id:375
 		if ac.state == connectivity.Ready || (ac.addrIdx == len(ac.addrs)-1 && ac.state == connectivity.Connecting && !ac.successfulHandshake) {
 			ac.updateConnectivityState(connectivity.TransientFailure)
 			ac.cc.handleSubConnStateChange(ac.acbw, ac.state)
@@ -1121,7 +1121,7 @@ func (ac *addrConn) createTransport(backoffNum int, addr resolver.Address, copts
 		close(prefaceReceived)
 		prefaceTimer.Stop()
 
-		// TODO(deklerk): optimization; does anyone else actually use this lock? maybe we can just remove it for this scope
+		// TODO (deklerk): optimization; does anyone else actually use this lock? maybe we can just remove it for this scope id:279
 		ac.mu.Lock()
 
 		prefaceMu.Lock()
@@ -1225,7 +1225,7 @@ func (ac *addrConn) createTransport(backoffNum int, addr resolver.Address, copts
 			close(allowedToReset)
 			return nil
 		}
-		// TODO: add a link to the health check doc in the error message.
+		// TODO: add a link to the health check doc in the error message. id:320
 		grpclog.Error("the client side LB channel health check function has not been set.")
 	}
 
@@ -1377,7 +1377,7 @@ func (ac *addrConn) getReadyTransport() (transport.ClientTransport, bool) {
 }
 
 // tearDown starts to tear down the addrConn.
-// TODO(zhaoq): Make this synchronous to avoid unbounded memory consumption in
+// TODO (zhaoq): Make this synchronous to avoid unbounded memory consumption in id:241
 // some edge cases (e.g., the caller opens and closes many addrConn's in a
 // tight loop.
 // tearDown doesn't remove ac from ac.cc.conns.
@@ -1461,7 +1461,7 @@ type retryThrottler struct {
 	ratio  float64
 
 	mu     sync.Mutex
-	tokens float64 // TODO(dfawley): replace with atomic and remove lock.
+	tokens float64 // TODO (dfawley): replace with atomic and remove lock. id:359
 }
 
 // throttle subtracts a retry token from the pool and returns whether a retry

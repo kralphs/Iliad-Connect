@@ -68,7 +68,7 @@ type _MessageSet_Item struct {
 type messageSet struct {
 	Item             []*_MessageSet_Item `protobuf:"group,1,rep"`
 	XXX_unrecognized []byte
-	// TODO: caching?
+	// TODO: caching? id:136
 }
 
 // Make sure messageSet is a Message.
@@ -105,7 +105,7 @@ func (ms *messageSet) Unmarshal(pb Message) error {
 	if _, ok := pb.(messageTypeIder); !ok {
 		return errNoMessageTypeID
 	}
-	return nil // TODO: return error instead?
+	return nil // TODO: return error instead? id:36
 }
 
 func (ms *messageSet) Marshal(pb Message) error {

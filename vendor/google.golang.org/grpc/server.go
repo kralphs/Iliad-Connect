@@ -812,7 +812,7 @@ func (s *Server) sendResponse(t transport.ServerTransport, stream *transport.Str
 		return err
 	}
 	hdr, payload := msgHeader(data, compData)
-	// TODO(dfawley): should we be checking len(data) instead?
+	// TODO (dfawley): should we be checking len(data) instead? id:330
 	if len(payload) > s.opts.maxSendMessageSize {
 		return status.Errorf(codes.ResourceExhausted, "grpc: trying to send message larger than max (%d vs. %d)", len(payload), s.opts.maxSendMessageSize)
 	}
@@ -912,7 +912,7 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 	// If cp is set, use it.  Otherwise, attempt to compress the response using
 	// the incoming message compression method.
 	//
-	// NOTE: this needs to be ahead of all handling, https://github.com/grpc/grpc-go/issues/686.
+	// NOTE: this needs to be ahead of all handling, https://github.com/grpc/grpc-go/issues/686. id:394
 	if s.opts.cp != nil {
 		cp = s.opts.cp
 		stream.SetSendCompress(cp.Type())
@@ -1042,9 +1042,9 @@ func (s *Server) processUnaryRPC(t transport.ServerTransport, stream *transport.
 	if trInfo != nil {
 		trInfo.tr.LazyLog(&payload{sent: true, msg: reply}, true)
 	}
-	// TODO: Should we be logging if writing status failed here, like above?
-	// Should the logging be in WriteStatus?  Should we ignore the WriteStatus
-	// error or allow the stats handler to see it?
+	// TODO: Should we be logging if writing status failed here, like above? id:403
+ // Should the logging be in WriteStatus?  Should we ignore the WriteStatus
+ // error or allow the stats handler to see it?
 	err = t.WriteStatus(stream, status.New(codes.OK, ""))
 	if binlog != nil {
 		binlog.Log(&binarylog.ServerTrailer{
@@ -1136,7 +1136,7 @@ func (s *Server) processStreamingRPC(t transport.ServerTransport, stream *transp
 	// If cp is set, use it.  Otherwise, attempt to compress the response using
 	// the incoming message compression method.
 	//
-	// NOTE: this needs to be ahead of all handling, https://github.com/grpc/grpc-go/issues/686.
+	// NOTE: this needs to be ahead of all handling, https://github.com/grpc/grpc-go/issues/686. id:386
 	if s.opts.cp != nil {
 		ss.cp = s.opts.cp
 		stream.SetSendCompress(s.opts.cp.Type())
@@ -1195,7 +1195,7 @@ func (s *Server) processStreamingRPC(t transport.ServerTransport, stream *transp
 				Err:     appErr,
 			})
 		}
-		// TODO: Should we log an error from WriteStatus here and below?
+		// TODO: Should we log an error from WriteStatus here and below? id:290
 		return appErr
 	}
 	if trInfo != nil {

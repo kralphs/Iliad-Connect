@@ -59,7 +59,7 @@ func Datacenter(ctx netcontext.Context) string {
 }
 
 func ServerSoftware() string {
-	// TODO(dsymonds): Remove fallback when we've verified this.
+	// TODO (dsymonds): Remove fallback when we've verified this. id:190
 	if s := os.Getenv("SERVER_SOFTWARE"); s != "" {
 		return s
 	}
@@ -69,7 +69,7 @@ func ServerSoftware() string {
 	return "Google App Engine/1.x.x"
 }
 
-// TODO(dsymonds): Remove the metadata fetches.
+// TODO (dsymonds): Remove the metadata fetches. id:354
 
 func ModuleName(_ netcontext.Context) string {
 	if s := os.Getenv("GAE_MODULE_NAME"); s != "" {

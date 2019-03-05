@@ -55,7 +55,7 @@ type MethodLogger struct {
 	callID          uint64
 	idWithinCallGen *callIDGenerator
 
-	sink Sink // TODO(blog): make this plugable.
+	sink Sink // TODO (blog): make this plugable. id:281
 }
 
 func newMethodLogger(h, m uint64) *MethodLogger {
@@ -66,7 +66,7 @@ func newMethodLogger(h, m uint64) *MethodLogger {
 		callID:          idGen.next(),
 		idWithinCallGen: &callIDGenerator{},
 
-		sink: defaultSink, // TODO(blog): make it plugable.
+		sink: defaultSink, // TODO (blog): make it plugable. id:322
 	}
 }
 

@@ -49,8 +49,8 @@ type PerRPCCredentials interface {
 	// for the RPC. uri is the URI of the entry point for the request.
 	// When supported by the underlying implementation, ctx can be used for
 	// timeout and cancellation.
-	// TODO(zhaoq): Define the set of the qualified keys instead of leaving
-	// it as an arbitrary string.
+	// TODO (zhaoq): Define the set of the qualified keys instead of leaving id:376
+ // it as an arbitrary string.
 	GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error)
 	// RequireTransportSecurity indicates whether the credentials requires
 	// transport security.
@@ -318,7 +318,7 @@ var cipherSuiteLookup = map[uint16]string{
 //
 // If cfg is nil, a new zero tls.Config is returned.
 //
-// TODO: inline this function if possible.
+// TODO: inline this function if possible. id:280
 func cloneTLSConfig(cfg *tls.Config) *tls.Config {
 	if cfg == nil {
 		return &tls.Config{}

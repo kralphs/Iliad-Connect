@@ -139,7 +139,7 @@ func (mi *mergeInfo) merge(dst, src pointer) {
 		fi.merge(dfp, sfp)
 	}
 
-	// TODO: Make this faster?
+	// TODO: Make this faster? id:200
 	out := dst.asPointerTo(mi.typ).Elem()
 	in := src.asPointerTo(mi.typ).Elem()
 	if emIn, err := extendable(in.Addr().Interface()); err == nil {
@@ -217,7 +217,7 @@ func (mi *mergeInfo) computeMergeInfo() {
 			switch {
 			case isSlice: // E.g., []int32
 				mfi.merge = func(dst, src pointer) {
-					// NOTE: toInt32Slice is not defined (see pointer_reflect.go).
+					// NOTE: toInt32Slice is not defined (see pointer_reflect.go). id:105
 					/*
 						sfsp := src.toInt32Slice()
 						if *sfsp != nil {
@@ -240,7 +240,7 @@ func (mi *mergeInfo) computeMergeInfo() {
 				}
 			case isPointer: // E.g., *int32
 				mfi.merge = func(dst, src pointer) {
-					// NOTE: toInt32Ptr is not defined (see pointer_reflect.go).
+					// NOTE: toInt32Ptr is not defined (see pointer_reflect.go). id:139
 					/*
 						sfpp := src.toInt32Ptr()
 						if *sfpp != nil {
@@ -608,7 +608,7 @@ func (mi *mergeInfo) computeMergeInfo() {
 			case isPointer || isSlice:
 				panic("bad pointer or slice in interface case in " + tf.Name())
 			default: // E.g., interface{}
-				// TODO: Make this faster?
+				// TODO: Make this faster? id:155
 				mfi.merge = func(dst, src pointer) {
 					su := src.asPointerTo(tf).Elem()
 					if !su.IsNil() {

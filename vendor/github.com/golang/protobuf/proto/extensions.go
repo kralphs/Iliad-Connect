@@ -265,7 +265,7 @@ func extensionProperties(ed *ExtensionDesc) *Properties {
 
 // HasExtension returns whether the given extension is present in pb.
 func HasExtension(pb Message, extension *ExtensionDesc) bool {
-	// TODO: Check types, field numbers, etc.?
+	// TODO: Check types, field numbers, etc.? id:195
 	epb, err := extendable(pb)
 	if err != nil {
 		return false
@@ -286,7 +286,7 @@ func ClearExtension(pb Message, extension *ExtensionDesc) {
 	if err != nil {
 		return
 	}
-	// TODO: Check types, field numbers, etc.?
+	// TODO: Check types, field numbers, etc.? id:82
 	extmap := epb.extensionsWrite()
 	delete(extmap, extension.Field)
 }
