@@ -8,6 +8,10 @@ import (
 	"net/http"
 	"net/url"
 	"parser"
+	"sync"
+	"time"
+
+	"golang.org/x/oauth2"
 )
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -44,9 +48,24 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	w.WriteHeader(http.StatusOK)
+	user, err := Auth.GetUserByEmail(r.Context(), "kevin.b.c.ralphs@gmail.com")
+
+	docToken, err := firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("clio").Get(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	token := new(oauth2.Token)
+	mapToken := docToken.Data()
+	token.AccessToken = mapToken["AccessToken"].(string)
+	token.RefreshToken = mapToken["RefreshToken"].(string)
+	token.TokenType = mapToken["TokenType"].(string)
+	token.Expiry = mapToken["Expiry"].(time.Time)
+
+	clioClient := clioOAuthConfig.Client(r.Context(), token)
+
 	for _, file := range files {
-		log.Println(file)
+		uploadFile(clioClient, payload.Data.MatterID, payload.Data.Link, file)
 	}
 }
 
@@ -69,6 +88,7 @@ func collectFiles(link string) ([][]byte, error) {
 	}
 	defer resp.Body.Close()
 
+	// Single file case
 	if resp.Header.Get("Content-Type") == "application/pdf" {
 		file, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
@@ -78,40 +98,74 @@ func collectFiles(link string) ([][]byte, error) {
 		return files, nil
 	}
 
+	// Multiple files or invalid link
 	urls := parser.GetUrls(resp.Body, false)
 	if len(urls) == 0 {
 		return nil, errors.New("Invalid or stale link")
 	}
 
+	// Convert relative paths to full URLs
 	base, err := url.Parse(link)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, ref := range urls {
-
+	for i, ref := range urls {
 		urlRef, err := url.Parse(ref)
 		if err != nil {
 			return nil, err
 		}
 		u := base.ResolveReference(urlRef)
-
-		res, err := client.Get(u.String())
-		if err != nil {
-			return nil, err
-		}
-		defer res.Body.Close()
-
-		if res.Header.Get("Content-Type") == "application/pdf" {
-			file, err := ioutil.ReadAll(res.Body)
-			if err != nil {
-				return nil, err
-			}
-			files = append(files, file)
-		} else {
-			return nil, errors.New("Invalid or stale link")
-		}
+		urls[i] = u.String()
 	}
 
+	// Attempt fetching files from each link
+	chFiles := make(chan []byte)
+	chErrors := make(chan error)
+	var wg sync.WaitGroup
+
+	for _, ref := range urls {
+		wg.Add(1)
+		go func(url string) {
+			log.Println(url)
+			downloadFile(client, url, chFiles, chErrors)
+			wg.Done()
+		}(ref)
+	}
+
+	for i := 0; i < len(urls); i++ {
+		select {
+		case file := <-chFiles:
+			files = append(files, file)
+		case err := <-chErrors:
+			return nil, err
+		}
+	}
+	wg.Wait()
 	return files, nil
+}
+
+func uploadFile(client *http.Client, matterID string, link string, file []byte) error {
+	log.Println("Uploaded a File")
+	return nil
+}
+
+func downloadFile(client *http.Client, u string, ch chan []byte, chErrors chan error) {
+
+	resp, err := client.Get(u)
+	if err != nil {
+		chErrors <- err
+	}
+	defer resp.Body.Close()
+
+	if resp.Header.Get("Content-Type") == "application/pdf" {
+		file, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			chErrors <- err
+		}
+		ch <- file
+	} else {
+		chErrors <- errors.New("Invalid or stale link")
+	}
+	log.Println("File downloaded")
 }
