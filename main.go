@@ -7,8 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/gorilla/csrf"
 )
 
 func main() {
@@ -29,7 +27,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":" + os.Getenv("PORT")),
-		Handler: csrf.Protect([]byte("32-byte-long-auth-key"))(handlers.New()),
+		Handler: handlers.New(),
 	}
 
 	log.Printf("Starting HTTP Server. Listening at %q", server.Addr)

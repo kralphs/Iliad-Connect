@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
+	"github.com/gorilla/csrf"
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
@@ -72,11 +73,12 @@ func (fs FileSystem) Open(path string) (http.File, error) {
 
 // New returns a new http handler
 func New() http.Handler {
+	CSRF := csrf.Protect([]byte("32-byte-long-auth-key"))
 
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/profile", profileHandler)
-	mux.HandleFunc("/sessionLogin", sessionHandler)
+	mux.Handle("/sessionLogin", CSRF(http.HandlerFunc(sessionHandler)))
 
 	// oauth_Clio
 	mux.HandleFunc("/auth/clio/login", oauthClioLogin)
