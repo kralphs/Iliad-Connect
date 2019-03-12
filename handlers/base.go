@@ -42,11 +42,6 @@ func newPool() *redis.Pool {
 			if err != nil {
 				panic(err.Error())
 			}
-			//			reply, err := c.Do("AUTH", os.Getenv("REDIS_KEY"))
-			//			if err != nil {
-			//				c.Close()
-			//				return nil, err
-			//			}
 			return c, err
 		},
 	}
@@ -92,7 +87,10 @@ func New() http.Handler {
 
 	// clio_handlers
 	mux.HandleFunc("/upload", uploadHandler)
-	mux.HandleFunc("/push", pushHandler)
+
+	// Email handlers
+	mux.HandleFunc("/email/google/push", googlePush)
+	mux.HandleFunc("/email/google/watch", googleWatch)
 
 	// Stripe Handlers
 	mux.HandleFunc("/subscribe", subscribeHandler)
