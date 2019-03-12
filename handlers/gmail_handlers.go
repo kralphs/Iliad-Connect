@@ -66,12 +66,19 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	result, err := isOdyssey(r.Context(), subject)
+	caseNumber, err := getCaseNumber(r.Context(), subject)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	log.Println(result)
+	labels, err := getOdysseyLabels()
 
+	log.Println(caseNumber)
+	log.Println(labels)
+	// TODO: Parse email body for link. Use HTML body
+
+	// TODO: Check if attached matter. If not, change label to "Odyssey AR"
+
+	// TODO: Send link and matter_id to begin document download
 	return
 }
