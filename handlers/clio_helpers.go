@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -12,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 func collectFiles(link string) ([]pdf, error) {
@@ -102,6 +104,68 @@ func downloadFile(client *http.Client, u string, ch chan pdf, chErrors chan erro
 	} else {
 		chErrors <- errors.New("Invalid or stale link")
 	}
+}
+
+func getCustomField(ctx context.Context, client *http.Client, name string) (int, error) {
+	type CustomFields struct {
+		Data []struct {
+			ID              int       `json:"id"`
+			Etag            string    `json:"etag"`
+			CreatedAt       time.Time `json:"created_at"`
+			UpdatedAt       time.Time `json:"updated_at"`
+			Name            string    `json:"name"`
+			ParentType      string    `json:"parent_type"`
+			FieldType       string    `json:"field_type"`
+			Displayed       bool      `json:"displayed"`
+			Deleted         bool      `json:"deleted"`
+			Required        bool      `json:"required"`
+			DisplayOrder    string    `json:"display_order"`
+			PicklistOptions []struct {
+				ID        int       `json:"id"`
+				Option    string    `json:"option"`
+				DeletedAt time.Time `json:"deleted_at"`
+			} `json:"picklist_options"`
+		} `json:"data"`
+	}
+
+	params := url.Values{}
+	params.Add("query", "Odyssey")
+	u := "https://app.clio.com/api/v4/custom_fields.json"
+	req, err := http.NewRequest("GET", u, nil)
+	if err != nil {
+		return 0, err
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return 0, err
+	}
+
+	if resp.StatusCode != 200 {
+		return 0, errors.New("Unable to fetch ID for custom field")
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return 0, nil
+	}
+
+	var customFields CustomFields
+	err = json.Unmarshal(body, &customFields)
+	if err != nil {
+		return 0, err
+	}
+
+	if len(customFields.Data) == 0 {
+		// TODO: Add New Custom Field
+	}
+	return customFields.Data[0].ID, nil
+
+}
+
+func getMatterID(ctx context.Context, client *http.Client, caseNumber string) (int, error) {
+
+	return 0, nil
 }
 
 func uploadFile(client *http.Client, matterID int, file pdf, ch chan error) {

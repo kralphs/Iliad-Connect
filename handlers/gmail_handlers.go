@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"bytes"
+	"encoding/base64"
 	"log"
 	"net/http"
+	"parser"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -50,8 +53,8 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getCall := gmailService.Users.Messages.Get("kevin.b.c.ralphs@gmail.com", "167850a584ce7690")
-	getCall.Context(r.Context())
+	getCall := gmailService.Users.Messages.Get("me", "167850a584ce7690")
+	getCall = getCall.Context(r.Context())
 	message, err := getCall.Do()
 	if err != nil {
 		log.Println("Failed to retrive message")
@@ -71,13 +74,37 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	labels, err := getOdysseyLabels()
+	labels, err := getOdysseyLabels(r.Context(), gmailService, user.UID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 
 	log.Println(caseNumber)
 	log.Println(labels)
-	// TODO: Parse email body for link. Use HTML body
 
 	// TODO: Check if attached matter. If not, change label to "Odyssey AR"
+
+	var body []byte
+	for _, part := range message.Payload.Parts {
+		if part.MimeType == "text/html" {
+			body, err = base64.URLEncoding.DecodeString(part.Body.Data)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			break
+		}
+	}
+
+	urls := parser.GetUrls(bytes.NewReader([]byte(body)), true)
+
+	whiteList, err := getWhiteList(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	link := findLink(urls, whiteList)
+
+	log.Println(link)
 
 	// TODO: Send link and matter_id to begin document download
 	return
