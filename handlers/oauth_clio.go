@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 
 	"golang.org/x/oauth2"
 )
@@ -11,7 +12,7 @@ import (
 // Scopes: OAuth 2.0 scopes provide a way to limit the amount of access that is granted to an access token.
 var (
 	clioOAuthConfig = &oauth2.Config{
-		RedirectURL:  "https://localhost:8000/auth/clio/callback",
+		RedirectURL:  os.Getenv("CLIO_REDIRECT"),
 		ClientID:     "ZrxvRba6rxX2Sb7PjPFNBWtXZHiH8Ckb65NiJaBM",
 		ClientSecret: "YdrMhGZRXXtlxif9PVlTYrohlXfpsCRzpjV0eLw4",
 		Endpoint: oauth2.Endpoint{

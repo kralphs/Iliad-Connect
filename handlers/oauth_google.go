@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 
 	"golang.org/x/oauth2"
 )
@@ -12,7 +13,7 @@ import (
 var (
 	authPrompt        = oauth2.SetAuthURLParam("prompt", "consent")
 	googleOAuthConfig = &oauth2.Config{
-		RedirectURL:  "https://localhost:8000/auth/google/callback",
+		RedirectURL:  os.Getenv("GOOGLE_REDIRECT"),
 		ClientID:     "502779193562-js5kgt2vh1ko1lvov83vpq72o35adfc5.apps.googleusercontent.com",
 		ClientSecret: "AGafwqjdLhcPx4SJGQcyb-j_",
 		Scopes:       []string{"https://www.googleapis.com/auth/gmail.labels", "https://www.googleapis.com/auth/gmail.modify"},

@@ -5,6 +5,8 @@ env_variables:
     SRIPE_SECRET_KEY: "sk_test_B0T2KXQvtzHqYUvJ3z7orSK8"
     REDIS_ENDPOINT: "redis-15073.c1.us-central1-2.gce.cloud.redislabs.com:15073"
     REDIS_KEY: "0eYhOgM0PwaMKDnksYBdIZ51FXxCxLPf"
+    GOOGLE_REDIRECT: "https://iliadconnect.com/auth/google/callback"
+    CLIO_REDIRECT: "https://iliadconnect.com/auth/clio/callback"
 
 handlers:
 

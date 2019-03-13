@@ -3,9 +3,9 @@ package handlers
 import (
 	"bytes"
 	"encoding/base64"
+	"iliad-connect/parser"
 	"log"
 	"net/http"
-	"parser"
 	"time"
 
 	"golang.org/x/oauth2"

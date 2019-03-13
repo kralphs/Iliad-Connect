@@ -9,11 +9,12 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"parser"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"iliad-connect/parser"
 )
 
 func collectFiles(link string) ([]pdf, error) {

@@ -50,6 +50,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		default:
+			log.Println(err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
