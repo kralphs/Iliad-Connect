@@ -6,9 +6,7 @@ import (
 	"iliad-connect/parser"
 	"log"
 	"net/http"
-	"time"
 
-	"golang.org/x/oauth2"
 	gmail "google.golang.org/api/gmail/v1"
 )
 
@@ -25,28 +23,10 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Getting Token")
-	docToken, err := firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("email").Get(r.Context())
-	if err != nil {
-		http.Error(w, "Error retrieving email authorization token", http.StatusInternalServerError)
-		return
-	}
-
-	log.Println("Token retrieved")
-	token := new(oauth2.Token)
-	log.Println("Mapping data to token")
-	mapToken := docToken.Data()
-	log.Println(mapToken)
-	token.AccessToken = mapToken["AccessToken"].(string)
-	token.RefreshToken = mapToken["RefreshToken"].(string)
-	token.TokenType = mapToken["TokenType"].(string)
-	token.Expiry = mapToken["Expiry"].(time.Time)
-
-	log.Println("Getting oauth client")
-	googleClient := googleOAuthConfig.Client(r.Context(), token)
+	emailClient, err := getOauthClient(r.Context(), user.UID, "email")
 
 	log.Println("Starting gmail service")
-	gmailService, err := gmail.New(googleClient)
+	gmailService, err := gmail.New(emailClient)
 	if err != nil {
 		log.Println("Failed to create Gmail service")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -83,6 +63,17 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 	log.Println(labels)
 
 	// TODO: Check if attached matter. If not, change label to "Odyssey AR"
+	clioClient, err := getOauthClient(r.Context(), user.UID, "clio")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	matterID, err := getMatterID(r.Context(), clioClient, caseNumber, user.UID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	log.Println(matterID)
 
 	var body []byte
 	for _, part := range message.Payload.Parts {

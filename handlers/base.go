@@ -17,6 +17,7 @@ import (
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -181,4 +182,33 @@ func checkSession(r *http.Request) (*auth.UserRecord, error) {
 	}
 
 	return user, nil
+}
+
+func getOauthClient(ctx context.Context, uid string, name string) (*http.Client, error) {
+	docToken, err := firestoreClient.Collection("users").Doc(uid).Collection("tokens").Doc(name).Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	token := new(oauth2.Token)
+	mapToken := docToken.Data()
+
+	token.AccessToken = mapToken["AccessToken"].(string)
+	token.RefreshToken = mapToken["RefreshToken"].(string)
+	token.TokenType = mapToken["TokenType"].(string)
+	token.Expiry = mapToken["Expiry"].(time.Time)
+
+	var config *oauth2.Config
+	switch name {
+	case "email":
+		config = googleOAuthConfig
+	case "clio":
+		config = clioOAuthConfig
+	default:
+		return nil, errors.New("No token with that name")
+	}
+	client := config.Client(ctx, token)
+
+	return client, nil
+
 }
