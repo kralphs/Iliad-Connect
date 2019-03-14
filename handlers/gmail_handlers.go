@@ -6,18 +6,22 @@ import (
 	"iliad-connect/parser"
 	"log"
 	"net/http"
+	"strconv"
 
 	gmail "google.golang.org/api/gmail/v1"
 )
 
 func googlePush(w http.ResponseWriter, r *http.Request) {
+
 	if r.URL.Path != "/email/google/push" {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	log.Println("Getting User")
-	user, err := Auth.GetUserByEmail(r.Context(), "kevin.b.c.ralphs@gmail.com")
+	email := "kevin.b.c.ralphs@gmail.com"
+	messageID := "167850a584ce7690"
+
+	user, err := Auth.GetUserByEmail(r.Context(), email)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -25,7 +29,6 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 
 	emailClient, err := getOauthClient(r.Context(), user.UID, "email")
 
-	log.Println("Starting gmail service")
 	gmailService, err := gmail.New(emailClient)
 	if err != nil {
 		log.Println("Failed to create Gmail service")
@@ -33,7 +36,7 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getCall := gmailService.Users.Messages.Get("me", "167850a584ce7690")
+	getCall := gmailService.Users.Messages.Get("me", messageID)
 	getCall = getCall.Context(r.Context())
 	message, err := getCall.Do()
 	if err != nil {
@@ -95,7 +98,7 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 
 	link := findLink(urls, whiteList)
 
-	log.Println(link)
+	w.Write([]byte("Matter ID: " + strconv.Itoa(matterID) + ", CaseNumber: " + caseNumber + ", Link: " + link))
 
 	// TODO: Send link and matter_id to begin document download
 	return
