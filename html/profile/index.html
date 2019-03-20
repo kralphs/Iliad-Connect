@@ -355,7 +355,7 @@
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Automatic Scanning</div>
-                      <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-on="Linked" data-off="Not Linked" data-size="sm" id="toggleScanning">
+                      <input type="checkbox" data-toggle="toggle" data-onstyle="primary" data-on="Active" data-off="Inactive" data-size="sm" id="toggleScanning" {{if .Scanning}} checked {{end}}>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-search fa-2x text-gray-300"></i>

@@ -22,10 +22,9 @@ function toggleEmail(e) {
 
 function toggleScanning(e) {
     if(document.getElementById("toggleScanning").checked){
-//        logoutClio().then((xhr)=> {}, (xhr) => {e.stopPropagation()})
+        stopScanning().then((xhr)=> {}, (xhr) => {e.stopPropagation()})
     } else {
-//        window.location.assign("/auth/google/login");
-        alert("Redirect to Login")
+        startScanning().then((xhr)=> {}, (xhr) => {e.stopPropagation()})
     }
 };
 
@@ -64,6 +63,44 @@ function logoutEmail(provider){
             };
           };
           xhr.open('GET', '/auth/' + provider + '/logout', true);
+          xhr.send(null);      
+    });
+}
+
+function startScanning(e) {
+    var xhr = new XMLHttpRequest;
+
+    return new Promise((resolve, reject) => {
+        xhr.onload = function () {
+            if (xhr.readyState=== 4 && xhr.status === 200) {
+              resolve(xhr);
+            } else {
+              reject({
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                });
+            };
+          };
+          xhr.open('GET', '/email/google/watch', true);
+          xhr.send(null);      
+    });
+}
+
+function stopScanning(e) {
+    var xhr = new XMLHttpRequest;
+
+    return new Promise((resolve, reject) => {
+        xhr.onload = function () {
+            if (xhr.readyState=== 4 && xhr.status === 200) {
+              resolve(xhr);
+            } else {
+              reject({
+                    status: xhr.status,
+                    statusText: xhr.statusText
+                });
+            };
+          };
+          xhr.open('GET', '/email/google/stop', true);
           xhr.send(null);      
     });
 }

@@ -95,6 +95,7 @@ func New() http.Handler {
 	// Email handlers
 	mux.HandleFunc("/email/google/push", googlePush)
 	mux.HandleFunc("/email/google/watch", googleWatch)
+	mux.HandleFunc("/email/google/stop", googleStop)
 
 	// Stripe Handlers
 	mux.HandleFunc("/subscribe", subscribeHandler)
@@ -223,6 +224,7 @@ func repeater(w http.ResponseWriter, r *http.Request) {
 	req, err := http.NewRequest("POST", "https://my.webhookrelay.com/v1/webhooks/7b306eb0-da9a-4472-ac78-3911a3ec1e3c", bytes.NewBuffer(body))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	resp, _ := client.Do(req)
 	body, _ = ioutil.ReadAll(resp.Body)

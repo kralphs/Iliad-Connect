@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"iliad-connect/parser"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -17,10 +18,9 @@ import (
 )
 
 func addLabel(ctx context.Context, srv *gmail.Service, messageID, labelID string) error {
-	var messageRequest *gmail.ModifyMessageRequest
+	var messageRequest gmail.ModifyMessageRequest
 	messageRequest.AddLabelIds = []string{labelID}
-
-	addCall := srv.Users.Messages.Modify("me", messageID, messageRequest)
+	addCall := srv.Users.Messages.Modify("me", messageID, &messageRequest)
 	_, err := addCall.Do()
 	if err != nil {
 		return err
@@ -35,6 +35,7 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 	getCall = getCall.Context(ctx)
 	message, err := getCall.Do()
 	if err != nil {
+		log.Println("Failed to retrieve message")
 		return err
 	}
 	var subject string
@@ -47,21 +48,29 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 
 	caseNumber, err := getCaseNumber(ctx, subject)
 	if err != nil {
+		log.Println("Failed to get case number")
 		return err
+	}
+
+	if caseNumber == "" {
+		return nil
 	}
 
 	labels, err := getOdysseyLabels(ctx, srv, uid)
 	if err != nil {
+		log.Println("Failed to retrieve labels")
 		return err
 	}
 
 	matterID, err := getMatterID(ctx, client, caseNumber, uid)
 	if err != nil {
+		log.Println("Error retrieving matter ID")
 		return err
 	}
 	if matterID == 0 {
 		err = addLabel(ctx, srv, messageID, labels["Odyssey AR"])
 		if err != nil {
+			log.Println("Error adding label")
 			return err
 		}
 		return nil
@@ -72,6 +81,7 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 		if part.MimeType == "text/html" {
 			body, err = base64.URLEncoding.DecodeString(part.Body.Data)
 			if err != nil {
+				log.Println("Maybe here?!?")
 				return err
 			}
 			break
@@ -82,6 +92,7 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 
 	whiteList, err := getWhiteList(ctx)
 	if err != nil {
+		log.Println("Error fetching white list")
 		return err
 	}
 
@@ -89,6 +100,7 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 
 	err = processLink(ctx, client, matterID, link)
 	if err != nil {
+		log.Println("Error processing link")
 		return err
 	}
 

@@ -18,6 +18,7 @@ type templateParams struct {
 	Clio         bool
 	Email        bool
 	Subscription bool
+	Scanning     bool
 }
 
 var (
@@ -83,6 +84,11 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		case "clio":
 			params.Clio = true
 		}
+	}
+
+	mapUser := userDoc.Data()
+	if _, ok := mapUser["scanning"]; ok {
+		params.Scanning = true
 	}
 
 	// Temporarily restricting access to users with the beta flag set to true
