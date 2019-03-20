@@ -19,6 +19,12 @@ import (
 	"iliad-connect/parser"
 )
 
+type pdf struct {
+	Name    string
+	Content []byte
+	URL     string
+}
+
 func collectFiles(link string) ([]pdf, error) {
 	files := []pdf{}
 
@@ -511,9 +517,7 @@ func getMatterID(ctx context.Context, client *http.Client, caseNumber string, ui
 		return 0, err
 	}
 
-	log.Println(odysseyID)
-
-	var params url.Values
+	params := url.Values{}
 	params.Add("custom_field_values["+strconv.Itoa(odysseyID)+"]", caseNumber)
 	u := "https://app.clio.com/api/v4/matters.json"
 	req, err := http.NewRequest("GET", u, nil)
@@ -544,10 +548,40 @@ func getMatterID(ctx context.Context, client *http.Client, caseNumber string, ui
 	}
 
 	if len(matter.Data) == 0 {
-		return 0, errors.New("No matter associated")
+		return 0, nil
 	}
 
 	return matter.Data[0].ID, nil
+}
+
+func processLink(ctx context.Context, client *http.Client, matterID int, link string) error {
+	files, err := collectFiles(link)
+	if err != nil {
+		return err
+	}
+
+	chErrors := make(chan error)
+	var wg sync.WaitGroup
+
+	for _, file := range files {
+		wg.Add(1)
+		go func(file pdf) {
+			defer wg.Done()
+			uploadFile(client, matterID, file, chErrors)
+		}(file)
+	}
+
+	var chErr error
+	go func() {
+		for err := range chErrors {
+			chErr = err
+			return
+		}
+	}()
+
+	wg.Wait()
+
+	return chErr
 }
 
 func uploadFile(client *http.Client, matterID int, file pdf, ch chan error) {
@@ -663,6 +697,7 @@ func uploadFile(client *http.Client, matterID int, file pdf, ch chan error) {
 		return
 	}
 	defer resp3.Body.Close()
+
 	if resp3.StatusCode != 200 {
 		ch <- errors.New(resp3.Status)
 		return

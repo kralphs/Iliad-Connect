@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -73,6 +75,7 @@ func New() http.Handler {
 
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/repeater", repeater)
 	mux.HandleFunc("/profile", profileHandler)
 	mux.Handle("/sessionLogin", CSRF(http.HandlerFunc(sessionHandler)))
 
@@ -211,4 +214,17 @@ func getOauthClient(ctx context.Context, uid string, name string) (*http.Client,
 
 	return client, nil
 
+}
+
+func repeater(w http.ResponseWriter, r *http.Request) {
+	log.Println("Starting to repeat...")
+	client := &http.Client{}
+	body, _ := ioutil.ReadAll(r.Body)
+	req, err := http.NewRequest("POST", "https://my.webhookrelay.com/v1/webhooks/7b306eb0-da9a-4472-ac78-3911a3ec1e3c", bytes.NewBuffer(body))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	resp, _ := client.Do(req)
+	body, _ = ioutil.ReadAll(resp.Body)
+	w.Write(body)
 }

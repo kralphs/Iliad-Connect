@@ -4,17 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"sync"
-	"time"
-
-	"golang.org/x/oauth2"
 )
-
-type pdf struct {
-	Name    string
-	Content []byte
-	URL     string
-}
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -22,6 +12,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		Data struct {
 			Link     string `json:"link"`
 			MatterID int    `json:"matterID"`
+			Email    string `json:"email"`
 		} `json:"data"`
 	}
 
@@ -41,49 +32,19 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	files, err := collectFiles(payload.Data.Link)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	}
+	user, err := Auth.GetUserByEmail(r.Context(), payload.Data.Email)
 
-	user, err := Auth.GetUserByEmail(r.Context(), "kevin.b.c.ralphs@gmail.com")
-
-	docToken, err := firestoreClient.Collection("users").Doc(user.UID).Collection("tokens").Doc("clio").Get(r.Context())
+	clioClient, err := getOauthClient(r.Context(), user.UID, "clio")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	token := new(oauth2.Token)
-	mapToken := docToken.Data()
-	token.AccessToken = mapToken["AccessToken"].(string)
-	token.RefreshToken = mapToken["RefreshToken"].(string)
-	token.TokenType = mapToken["TokenType"].(string)
-	token.Expiry = mapToken["Expiry"].(time.Time)
-
-	clioClient := clioOAuthConfig.Client(r.Context(), token)
-
-	chErrors := make(chan error)
-	var wg sync.WaitGroup
-
-	for _, file := range files {
-		wg.Add(1)
-		go func(file pdf) {
-			defer wg.Done()
-			uploadFile(clioClient, payload.Data.MatterID, file, chErrors)
-		}(file)
+	err = processLink(r.Context(), clioClient, payload.Data.MatterID, payload.Data.Link)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
-
-	go func() {
-		for err := range chErrors {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	}()
-
-	wg.Wait()
 
 	w.Write([]byte("Successful"))
-}
-
-func googleWatch(w http.ResponseWriter, r *http.Request) {
-	return
 }

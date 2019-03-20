@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"errors"
 	"fmt"
-	"log"
+	"iliad-connect/parser"
+	"net/http"
 	"regexp"
 	"strings"
 	"sync"
@@ -13,8 +16,83 @@ import (
 	gmail "google.golang.org/api/gmail/v1"
 )
 
-func processEmail(subject string, body string) {
-	return
+func addLabel(ctx context.Context, srv *gmail.Service, messageID, labelID string) error {
+	var messageRequest *gmail.ModifyMessageRequest
+	messageRequest.AddLabelIds = []string{labelID}
+
+	addCall := srv.Users.Messages.Modify("me", messageID, messageRequest)
+	_, err := addCall.Do()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, uid string, messageID string) error {
+
+	getCall := srv.Users.Messages.Get("me", messageID)
+	getCall = getCall.Context(ctx)
+	message, err := getCall.Do()
+	if err != nil {
+		return err
+	}
+	var subject string
+	for _, header := range message.Payload.Headers {
+		if header.Name == "Subject" {
+			subject = header.Value
+			break
+		}
+	}
+
+	caseNumber, err := getCaseNumber(ctx, subject)
+	if err != nil {
+		return err
+	}
+
+	labels, err := getOdysseyLabels(ctx, srv, uid)
+	if err != nil {
+		return err
+	}
+
+	matterID, err := getMatterID(ctx, client, caseNumber, uid)
+	if err != nil {
+		return err
+	}
+	if matterID == 0 {
+		err = addLabel(ctx, srv, messageID, labels["Odyssey AR"])
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	var body []byte
+	for _, part := range message.Payload.Parts {
+		if part.MimeType == "text/html" {
+			body, err = base64.URLEncoding.DecodeString(part.Body.Data)
+			if err != nil {
+				return err
+			}
+			break
+		}
+	}
+
+	urls := parser.GetUrls(bytes.NewReader([]byte(body)), true)
+
+	whiteList, err := getWhiteList(ctx)
+	if err != nil {
+		return err
+	}
+
+	link := findLink(urls, whiteList)
+
+	err = processLink(ctx, client, matterID, link)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func getCaseNumber(ctx context.Context, subject string) (string, error) {
@@ -33,7 +111,6 @@ func getCaseNumber(ctx context.Context, subject string) (string, error) {
 			return "", errors.New("Error fetching subject list from database")
 		}
 		mapSubjects := docSubjects.Data()
-		log.Println(mapSubjects["list"])
 		strSubjects := mapSubjects["list"].([]interface{})
 		subjects = make([][]byte, len(strSubjects))
 
@@ -46,13 +123,11 @@ func getCaseNumber(ctx context.Context, subject string) (string, error) {
 		}
 	}
 
-	log.Println(subject)
 	for _, sub := range subjects {
 		reg, err := regexp.Compile(string(sub))
 		if err != nil {
 			return "", err
 		}
-		log.Println(string(sub))
 		result := reg.FindSubmatch([]byte(subject))
 		if len(result) != 0 {
 			return string(result[1]), nil
@@ -63,7 +138,6 @@ func getCaseNumber(ctx context.Context, subject string) (string, error) {
 }
 
 func getOdysseyLabels(ctx context.Context, srv *gmail.Service, uid string) (map[string]string, error) {
-	log.Println("Getting Labels")
 	result := make(map[string]string)
 
 	cache := pool.Get()
@@ -74,8 +148,6 @@ func getOdysseyLabels(ctx context.Context, srv *gmail.Service, uid string) (map[
 	if err != nil && err != redis.ErrNil {
 		return nil, err
 	}
-
-	log.Println("From cache: Odyssey - " + labelID)
 
 	labelARID, err := redis.String(cache.Do("GET", uid+":Osyssey AR"))
 	if err != nil && err != redis.ErrNil {
@@ -97,7 +169,6 @@ func getOdysseyLabels(ctx context.Context, srv *gmail.Service, uid string) (map[
 		return nil, err
 	}
 
-	log.Println(len(labels.Labels))
 	for _, label := range labels.Labels {
 		switch label.Name {
 		case "Odyssey":
@@ -199,4 +270,29 @@ func findLink(urls, domains []string) string {
 		}
 	}
 	return ""
+}
+
+func getEmail(ctx context.Context, srv *gmail.Service, uid string) (string, error) {
+
+	docUser, err := firestoreClient.Collection("users").Doc(uid).Get(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	mapUser := docUser.Data()
+	provider := mapUser["email"]
+
+	switch provider {
+	case "google":
+		getCall := srv.Users.GetProfile("me")
+		getCall.Context(ctx)
+		profile, err := getCall.Do()
+		if err != nil {
+			return "", err
+		}
+
+		return profile.EmailAddress, nil
+	}
+
+	return "", errors.New("Could not retrieve email from uid")
 }
