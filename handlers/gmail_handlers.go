@@ -137,6 +137,7 @@ func googlePush(w http.ResponseWriter, r *http.Request) {
 	log.Println("Waiting...")
 	wg.Wait()
 
+	// Update history entry in database
 	_, err = firestoreClient.Collection("googleWatch").Doc(email).Update(r.Context(), []firestore.Update{
 		{
 			Path:  "StartHistoryID",
@@ -166,6 +167,8 @@ func googleWatch(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	// Set up http clients
 
 	client, err := getOauthClient(r.Context(), user.UID, "email")
 	if err != nil {

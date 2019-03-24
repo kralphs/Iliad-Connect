@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "fmt"
 	"fmt"
 	"iliad-connect/handlers"
 	"log"
@@ -19,10 +18,18 @@ func main() {
 	}
 
 	log.Printf("Starting HTTP Server. Listening at %q", server.Addr)
-	if err := server.ListenAndServeTLS("localhost.crt", "localhost.key"); err != http.ErrServerClosed {
-		//if err := server.ListenAndServe(); err != http.ErrServerClosed {
-		log.Printf("%v", err)
+
+	if _, ok := os.LookupEnv("LOCAL_SERVER"); ok {
+		if err := server.ListenAndServeTLS("localhost.crt", "localhost.key"); err != http.ErrServerClosed {
+			log.Printf("%v", err)
+		} else {
+			log.Println("Server closed!")
+		}
 	} else {
-		log.Println("Server closed!")
+		if err := server.ListenAndServe(); err != http.ErrServerClosed {
+			log.Printf("%v", err)
+		} else {
+			log.Println("Server closed!")
+		}
 	}
 }

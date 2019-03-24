@@ -81,7 +81,7 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 		if part.MimeType == "text/html" {
 			body, err = base64.URLEncoding.DecodeString(part.Body.Data)
 			if err != nil {
-				log.Println("Maybe here?!?")
+				addLabel(ctx, srv, messageID, labels["Odyssey AR"])
 				return err
 			}
 			break
@@ -93,6 +93,7 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 	whiteList, err := getWhiteList(ctx)
 	if err != nil {
 		log.Println("Error fetching white list")
+		addLabel(ctx, srv, messageID, labels["Odyssey AR"])
 		return err
 	}
 
@@ -101,8 +102,11 @@ func processEmail(ctx context.Context, srv *gmail.Service, client *http.Client, 
 	err = processLink(ctx, client, matterID, link)
 	if err != nil {
 		log.Println("Error processing link")
+		addLabel(ctx, srv, messageID, labels["Odyssey AR"])
 		return err
 	}
+
+	addLabel(ctx, srv, messageID, labels["Odyssey"])
 
 	return nil
 }
