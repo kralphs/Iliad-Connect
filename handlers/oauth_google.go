@@ -15,7 +15,7 @@ var (
 	googleOAuthConfig = &oauth2.Config{
 		RedirectURL:  os.Getenv("GOOGLE_REDIRECT"),
 		ClientID:     "502779193562-js5kgt2vh1ko1lvov83vpq72o35adfc5.apps.googleusercontent.com",
-		ClientSecret: "AGafwqjdLhcPx4SJGQcyb-j_",
+		ClientSecret: "It's a secret",
 		Scopes:       []string{"https://www.googleapis.com/auth/gmail.labels", "https://www.googleapis.com/auth/gmail.modify"},
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  "https://accounts.google.com/o/oauth2/v2/auth",
