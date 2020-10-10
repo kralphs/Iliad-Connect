@@ -14,7 +14,7 @@ var (
 	clioOAuthConfig = &oauth2.Config{
 		RedirectURL:  os.Getenv("CLIO_REDIRECT"),
 		ClientID:     "ZrxvRba6rxX2Sb7PjPFNBWtXZHiH8Ckb65NiJaBM",
-		ClientSecret: "YdrMhGZRXXtlxif9PVlTYrohlXfpsCRzpjV0eLw4",
+		ClientSecret: "It's Secret",
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  "https://app.clio.com/oauth/authorize",
 			TokenURL: "https://app.clio.com/oauth/token",
