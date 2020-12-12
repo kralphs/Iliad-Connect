@@ -9,8 +9,11 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${fileDirname}",
-            "env": {},
+            "program": "${workspaceFolder}",
+            "env": {
+                "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\kbr03231\\Documents\\GitHub\\Iliad-Connect\\Iliad Connect-2bd4cfcb15fc.json",
+                "PORT": 8080
+            },
             "args": []
         }
     ]
